@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ClerkProvider, Show, useClerk } from "@clerk/react";
 import { publishableKeyFromHost } from "@clerk/react/internal";
 import { dark } from "@clerk/themes";
+import { ThemeProvider, useTheme } from "@/lib/theme";
 
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
@@ -38,25 +39,31 @@ if (!clerkPubKey) {
   throw new Error("Missing VITE_CLERK_PUBLISHABLE_KEY in .env file");
 }
 
-const clerkAppearance = {
-  baseTheme: dark,
-  cssLayerName: "clerk",
-  variables: {
-    colorPrimary: "#6c63ff",
-    colorBackground: "#16161f",
-    colorInputBackground: "#111118",
-    colorInputText: "#f0f0ff",
-    colorText: "#f0f0ff",
-    colorTextSecondary: "#8b8ba7",
-    colorDanger: "#ef4444",
-    fontFamily: "'Inter', sans-serif",
-    borderRadius: "8px",
-  },
-  elements: {
-    card: "shadow-2xl border border-[#2a2a3a]",
-    formButtonPrimary: "bg-[#6c63ff] hover:bg-[#7c74ff]",
-  }
-};
+function buildClerkAppearance(theme: "dark" | "light") {
+  const isDark = theme === "dark";
+  return {
+    baseTheme: isDark ? dark : undefined,
+    cssLayerName: "clerk",
+    variables: {
+      colorPrimary: "#6c63ff",
+      colorBackground: isDark ? "#16161f" : "#ffffff",
+      colorInputBackground: isDark ? "#111118" : "#ebebf5",
+      colorInputText: isDark ? "#f0f0ff" : "#12122a",
+      colorText: isDark ? "#f0f0ff" : "#12122a",
+      colorTextSecondary: isDark ? "#8b8ba7" : "#4a4a70",
+      colorDanger: isDark ? "#ef4444" : "#dc2626",
+      colorNeutral: isDark ? "#2a2a3a" : "#d0d0e8",
+      fontFamily: "'Inter', sans-serif",
+      borderRadius: "8px",
+    },
+    elements: {
+      card: isDark
+        ? "shadow-2xl border border-[#2a2a3a]"
+        : "shadow-lg border border-[#d0d0e8]",
+      formButtonPrimary: "bg-[#6c63ff] hover:bg-[#7c74ff]",
+    },
+  };
+}
 
 function ClerkQueryClientCacheInvalidator() {
   const { addListener } = useClerk();
@@ -95,12 +102,13 @@ function ProtectedRoute({ component: Component }: { component: React.ComponentTy
 
 function ClerkProviderWithRoutes() {
   const [, setLocation] = useLocation();
+  const { theme } = useTheme();
 
   return (
     <ClerkProvider
       publishableKey={clerkPubKey}
       proxyUrl={clerkProxyUrl}
-      appearance={clerkAppearance}
+      appearance={buildClerkAppearance(theme)}
       signInUrl={`${basePath}/sign-in`}
       signUpUrl={`${basePath}/sign-up`}
       routerPush={(to) => setLocation(stripBase(to))}
@@ -127,12 +135,14 @@ function ClerkProviderWithRoutes() {
 
 function App() {
   return (
-    <TooltipProvider>
-      <WouterRouter base={basePath}>
-        <ClerkProviderWithRoutes />
-      </WouterRouter>
-      <Toaster />
-    </TooltipProvider>
+    <ThemeProvider>
+      <TooltipProvider>
+        <WouterRouter base={basePath}>
+          <ClerkProviderWithRoutes />
+        </WouterRouter>
+        <Toaster />
+      </TooltipProvider>
+    </ThemeProvider>
   );
 }
 

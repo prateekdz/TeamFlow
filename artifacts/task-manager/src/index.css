@@ -58,7 +58,8 @@
   --radius-xl: 16px;
 }
 
-:root {
+:root,
+:root.dark {
   --bg-primary: #0a0a0f;
   --bg-secondary: #111118;
   --bg-card: #16161f;
@@ -79,9 +80,25 @@
   color-scheme: dark;
 }
 
-.dark {
-  /* same, just to be sure */
-  color-scheme: dark;
+:root.light {
+  --bg-primary: #f5f5fb;
+  --bg-secondary: #ebebf5;
+  --bg-card: #ffffff;
+  --bg-hover: #e0e0f0;
+  --border: #d0d0e8;
+  --border-subtle: #e8e8f4;
+  --accent: #6c63ff;
+  --accent-hover: #5a52dd;
+  --accent-glow: rgba(108,99,255,0.12);
+  --text-primary: #12122a;
+  --text-secondary: #4a4a70;
+  --text-muted: #9090b0;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #2563eb;
+
+  color-scheme: light;
 }
 
 @layer base {

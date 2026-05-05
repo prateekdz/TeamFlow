@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, FolderKanban, Settings, LogOut, ChevronLeft, Menu, Search } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Settings, LogOut, ChevronLeft, Menu, Search, Sun, Moon } from "lucide-react";
 import { useClerk, useUser } from "@clerk/react";
 import { useGetMe } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
@@ -14,11 +14,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useTheme } from "@/lib/theme";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const { signOut } = useClerk();
   const { user } = useUser();
+  const { theme, toggleTheme } = useTheme();
   const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -106,18 +108,47 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="p-2 border-t border-[var(--border)]">
+          {/* Theme toggle */}
+          {collapsed ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-full justify-center h-9 text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] mb-1"
+                  onClick={toggleTheme}
+                  data-testid="button-theme-toggle"
+                >
+                  {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">{theme === "dark" ? "Light mode" : "Dark mode"}</TooltipContent>
+            </Tooltip>
+          ) : (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start h-9 text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] mb-1"
+              onClick={toggleTheme}
+              data-testid="button-theme-toggle"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4 mr-2 shrink-0" /> : <Moon className="w-4 h-4 mr-2 shrink-0" />}
+              {theme === "dark" ? "Light mode" : "Dark mode"}
+            </Button>
+          )}
+
           <Link href="/settings">
             {collapsed ? (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" className="w-full justify-center h-9 text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-white" size="icon">
+                  <Button variant="ghost" className="w-full justify-center h-9 text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]" size="icon">
                     <Settings className="w-4 h-4" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right">Settings</TooltipContent>
               </Tooltip>
             ) : (
-              <Button variant="ghost" className="w-full justify-start h-9 text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-white mb-1" size="sm">
+              <Button variant="ghost" className="w-full justify-start h-9 text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] mb-1" size="sm">
                 <Settings className="w-4 h-4 mr-2 shrink-0" />
                 Settings
               </Button>
