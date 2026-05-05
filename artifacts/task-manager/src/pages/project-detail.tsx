@@ -10,7 +10,6 @@ import {
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { 
   Select,
   SelectContent,
@@ -31,7 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CheckCircle2, Clock, MoreHorizontal, Plus, Search, Settings, Users, ArrowLeft, ArrowUpCircle, ArrowDownCircle, AlertCircle, Circle, Calendar } from "lucide-react";
+import { CheckCircle2, Clock, Plus, Search, Settings, Users, ArrowLeft, ArrowUpCircle, ArrowDownCircle, AlertCircle, Circle, Calendar } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -136,7 +135,7 @@ export default function ProjectDetail() {
     return (
       <Layout>
         <div className="text-center py-20">
-          <h2 className="text-2xl font-bold text-white">Project not found</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)]">Project not found</h2>
           <p className="text-[var(--text-secondary)] mt-2 mb-6">The project you're looking for doesn't exist or you don't have access.</p>
           <Link href="/projects">
             <Button className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white">Back to Projects</Button>
@@ -155,19 +154,19 @@ export default function ProjectDetail() {
         {/* Header */}
         <div className="flex flex-col gap-4 border-b border-[var(--border)] pb-6">
           <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] mb-1">
-            <Link href="/projects" className="hover:text-white transition-colors flex items-center">
+            <Link href="/projects" className="hover:text-[var(--text-primary)] transition-colors flex items-center">
               <ArrowLeft className="w-3.5 h-3.5 mr-1" />
               Projects
             </Link>
             <span>/</span>
-            <span className="font-medium text-white">{project.name}</span>
+            <span className="font-medium text-[var(--text-primary)]">{project.name}</span>
           </div>
           
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
             <div className="flex items-start gap-4">
               <div className="w-6 h-12 rounded-lg mt-1 shrink-0" style={{ backgroundColor: projectColor }} />
               <div>
-                <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3 flex-wrap">
+                <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)] flex items-center gap-3 flex-wrap">
                   {project.name}
                   <span className="text-xs uppercase tracking-wider px-2 py-1 rounded bg-[var(--bg-secondary)] text-[var(--text-secondary)] font-semibold border border-[var(--border-subtle)] align-middle">
                     {project.myRole}
@@ -181,13 +180,13 @@ export default function ProjectDetail() {
             
             <div className="flex items-center gap-3 shrink-0">
               <Link href={`/projects/${project.id}/members`}>
-                <Button variant="outline" className="border-[var(--border)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-white" data-testid="button-manage-members">
+                <Button variant="outline" className="border-[var(--border)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)]" data-testid="button-manage-members">
                   <Users className="w-4 h-4 mr-2" />
                   Members ({project.memberCount})
                 </Button>
               </Link>
               {isAdmin && (
-                <Button variant="outline" size="icon" className="border-[var(--border)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-white" title="Project Settings">
+                <Button variant="outline" size="icon" className="border-[var(--border)] bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)]" title="Project Settings">
                   <Settings className="w-4 h-4" />
                 </Button>
               )}
@@ -198,46 +197,46 @@ export default function ProjectDetail() {
                     New Task
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-[var(--bg-card)] border-[var(--border)] text-white sm:max-w-[500px]">
+                <DialogContent className="bg-[var(--bg-card)] border-[var(--border)] sm:max-w-[500px]">
                   <DialogHeader>
-                    <DialogTitle>Create New Task</DialogTitle>
+                    <DialogTitle className="text-[var(--text-primary)]">Create New Task</DialogTitle>
                     <DialogDescription className="text-[var(--text-secondary)]">
-                      Add a new task to <span className="font-semibold text-white">{project.name}</span>.
+                      Add a new task to <span className="font-semibold text-[var(--text-primary)]">{project.name}</span>.
                     </DialogDescription>
                   </DialogHeader>
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
                     <div className="space-y-2">
-                      <Label htmlFor="title" className="text-white">Task Title</Label>
+                      <Label htmlFor="title" className="text-[var(--text-primary)]">Task Title</Label>
                       <Input 
                         id="title" 
                         placeholder="E.g., Design landing page header" 
                         {...register("title")} 
-                        className="bg-[var(--bg-secondary)] border-[var(--border)] text-white focus-visible:ring-[var(--accent)]"
+                        className="bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus-visible:ring-[var(--accent)]"
                         data-testid="input-task-title" 
                       />
                       {errors.title && <p className="text-sm text-[var(--danger)]">{errors.title.message}</p>}
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="description" className="text-white">Description (optional)</Label>
+                      <Label htmlFor="description" className="text-[var(--text-primary)]">Description (optional)</Label>
                       <Textarea 
                         id="description" 
                         placeholder="Add more details about what needs to be done..." 
                         {...register("description")} 
-                        className="bg-[var(--bg-secondary)] border-[var(--border)] text-white focus-visible:ring-[var(--accent)] min-h-[100px] resize-y"
+                        className="bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus-visible:ring-[var(--accent)] min-h-[100px] resize-y"
                         data-testid="input-task-desc" 
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label className="text-white">Status</Label>
+                        <Label className="text-[var(--text-primary)]">Status</Label>
                         <Select 
                           value={watch("status")} 
                           onValueChange={(val: any) => setValue("status", val)}
                         >
-                          <SelectTrigger className="bg-[var(--bg-secondary)] border-[var(--border)] text-white focus:ring-[var(--accent)]" data-testid="select-task-status">
+                          <SelectTrigger className="bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] focus:ring-[var(--accent)]" data-testid="select-task-status">
                             <SelectValue placeholder="Select status" />
                           </SelectTrigger>
-                          <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
+                          <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)]">
                             <SelectItem value="todo">To Do</SelectItem>
                             <SelectItem value="in_progress">In Progress</SelectItem>
                             <SelectItem value="done">Done</SelectItem>
@@ -246,33 +245,25 @@ export default function ProjectDetail() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-white">Priority</Label>
+                        <Label className="text-[var(--text-primary)]">Priority</Label>
                         <Select 
                           value={watch("priority")} 
                           onValueChange={(val: any) => setValue("priority", val)}
                         >
-                          <SelectTrigger className="bg-[var(--bg-secondary)] border-[var(--border)] text-white focus:ring-[var(--accent)]" data-testid="select-task-priority">
+                          <SelectTrigger className="bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] focus:ring-[var(--accent)]" data-testid="select-task-priority">
                             <SelectValue placeholder="Select priority" />
                           </SelectTrigger>
-                          <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
-                            <SelectItem value="low">
-                              <div className="flex items-center gap-2">{PRIORITY_ICONS.low} Low</div>
-                            </SelectItem>
-                            <SelectItem value="medium">
-                              <div className="flex items-center gap-2">{PRIORITY_ICONS.medium} Medium</div>
-                            </SelectItem>
-                            <SelectItem value="high">
-                              <div className="flex items-center gap-2">{PRIORITY_ICONS.high} High</div>
-                            </SelectItem>
-                            <SelectItem value="urgent">
-                              <div className="flex items-center gap-2">{PRIORITY_ICONS.urgent} Urgent</div>
-                            </SelectItem>
+                          <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)]">
+                            <SelectItem value="low"><div className="flex items-center gap-2">{PRIORITY_ICONS.low} Low</div></SelectItem>
+                            <SelectItem value="medium"><div className="flex items-center gap-2">{PRIORITY_ICONS.medium} Medium</div></SelectItem>
+                            <SelectItem value="high"><div className="flex items-center gap-2">{PRIORITY_ICONS.high} High</div></SelectItem>
+                            <SelectItem value="urgent"><div className="flex items-center gap-2">{PRIORITY_ICONS.urgent} Urgent</div></SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                     <DialogFooter className="pt-6 border-t border-[var(--border)] mt-6">
-                      <Button type="button" variant="outline" onClick={() => setIsCreateOpen(false)} className="border-[var(--border)] hover:bg-[var(--bg-hover)] text-white">
+                      <Button type="button" variant="outline" onClick={() => setIsCreateOpen(false)} className="border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]">
                         Cancel
                       </Button>
                       <Button type="submit" disabled={createTaskMutation.isPending} className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white" data-testid="button-submit-task">
@@ -293,15 +284,15 @@ export default function ProjectDetail() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)]" />
               <Input
                 placeholder="Search tasks..."
-                className="pl-9 bg-[var(--bg-card)] border-[var(--border)] focus-visible:ring-[var(--accent)] text-white h-9"
+                className="pl-9 bg-[var(--bg-card)] border-[var(--border)] focus-visible:ring-[var(--accent)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] h-9"
               />
             </div>
             
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[140px] bg-[var(--bg-card)] border-[var(--border)] text-white h-9 focus:ring-[var(--accent)]" data-testid="filter-status">
+              <SelectTrigger className="w-[140px] bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)] h-9 focus:ring-[var(--accent)]" data-testid="filter-status">
                 <SelectValue placeholder="All Statuses" />
               </SelectTrigger>
-              <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
+              <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)]">
                 <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="todo">To Do</SelectItem>
                 <SelectItem value="in_progress">In Progress</SelectItem>
@@ -310,10 +301,10 @@ export default function ProjectDetail() {
             </Select>
 
             <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-              <SelectTrigger className="w-[140px] bg-[var(--bg-card)] border-[var(--border)] text-white h-9 focus:ring-[var(--accent)]" data-testid="filter-priority">
+              <SelectTrigger className="w-[140px] bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)] h-9 focus:ring-[var(--accent)]" data-testid="filter-priority">
                 <SelectValue placeholder="All Priorities" />
               </SelectTrigger>
-              <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
+              <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)]">
                 <SelectItem value="all">All Priorities</SelectItem>
                 <SelectItem value="low">Low</SelectItem>
                 <SelectItem value="medium">Medium</SelectItem>
@@ -351,8 +342,8 @@ export default function ProjectDetail() {
                 const getStatusStyle = (status: string) => {
                   switch(status) {
                     case 'todo': return 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border)]';
-                    case 'in_progress': return 'bg-blue-500/10 text-[var(--info)] border-blue-900/50';
-                    case 'done': return 'bg-[var(--success)]/10 text-[var(--success)] border-green-900/50';
+                    case 'in_progress': return 'bg-blue-500/10 text-[var(--info)] border-blue-500/30';
+                    case 'done': return 'bg-[var(--success)]/10 text-[var(--success)] border-green-500/30';
                     case 'cancelled': return 'bg-transparent text-[var(--text-muted)] border-dashed border-[var(--border)]';
                     default: return 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border)]';
                   }
@@ -370,7 +361,7 @@ export default function ProjectDetail() {
                       
                       <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6">
                         <div className="flex flex-col gap-1 min-w-0">
-                          <span className={`font-semibold truncate transition-colors ${task.status === 'done' ? 'text-[var(--text-muted)] line-through decoration-[var(--border)]' : 'text-white group-hover:text-[var(--accent)]'}`}>
+                          <span className={`font-semibold truncate transition-colors ${task.status === 'done' ? 'text-[var(--text-muted)] line-through' : 'text-[var(--text-primary)] group-hover:text-[var(--accent)]'}`}>
                             {task.title}
                           </span>
                           <div className="flex flex-wrap items-center gap-3 text-xs text-[var(--text-muted)]">
@@ -398,7 +389,7 @@ export default function ProjectDetail() {
                             {task.assignee ? (
                               <Avatar className="h-7 w-7 border border-[var(--border)] shadow-sm" title={task.assignee.name}>
                                 <AvatarImage src={task.assignee.avatarUrl || undefined} />
-                                <AvatarFallback className="text-[10px] bg-[var(--bg-secondary)] text-white">{task.assignee.name.charAt(0)}</AvatarFallback>
+                                <AvatarFallback className="text-[10px] bg-[var(--bg-secondary)] text-[var(--text-secondary)]">{task.assignee.name.charAt(0)}</AvatarFallback>
                               </Avatar>
                             ) : (
                               <div className="h-7 w-7 rounded-full border border-dashed border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-muted)] bg-[var(--bg-secondary)]" title="Unassigned">
@@ -418,14 +409,14 @@ export default function ProjectDetail() {
               <div className="w-16 h-16 bg-[var(--bg-secondary)] rounded-full flex items-center justify-center mb-4 text-[var(--text-muted)]">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">No tasks found</h3>
+              <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">No tasks found</h3>
               <p className="text-[var(--text-secondary)] max-w-sm mb-6">
                 {statusFilter !== "all" || priorityFilter !== "all" 
                   ? "Try adjusting your filters to see more tasks." 
                   : "Create your first task to get started."}
               </p>
               {(statusFilter !== "all" || priorityFilter !== "all") ? (
-                <Button variant="outline" className="border-[var(--border)] text-white hover:bg-[var(--bg-hover)]" onClick={() => { setStatusFilter("all"); setPriorityFilter("all"); }}>
+                <Button variant="outline" className="border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]" onClick={() => { setStatusFilter("all"); setPriorityFilter("all"); }}>
                   Clear Filters
                 </Button>
               ) : (

@@ -41,7 +41,6 @@ export default function Settings() {
   }, [user, reset]);
 
   const onSubmit = (data: SettingsFormValues) => {
-    // Convert empty string to null for API
     const payload = {
       name: data.name,
       avatarUrl: data.avatarUrl === "" ? null : data.avatarUrl,
@@ -71,7 +70,7 @@ export default function Settings() {
     <Layout>
       <div className="max-w-3xl mx-auto flex flex-col gap-8 pb-10 fade-in duration-300">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Settings</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)]">Settings</h1>
           <p className="text-[var(--text-secondary)] mt-1">Manage your account preferences and profile.</p>
         </div>
 
@@ -105,26 +104,26 @@ export default function Settings() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Card className="bg-[var(--bg-card)] border-[var(--border)] shadow-md overflow-hidden">
               <CardHeader className="border-b border-[var(--border)] bg-[var(--bg-secondary)]/50 pb-6">
-                <CardTitle className="text-xl text-white">Profile Information</CardTitle>
+                <CardTitle className="text-xl text-[var(--text-primary)]">Profile Information</CardTitle>
                 <CardDescription className="text-[var(--text-secondary)]">Update your photo and personal details.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-8 pt-8">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 bg-[var(--bg-secondary)] p-6 rounded-xl border border-[var(--border-subtle)]">
                   <Avatar className="h-28 w-28 border-4 border-[var(--bg-card)] shadow-xl shrink-0 relative group">
                     <AvatarImage src={previewAvatarUrl || user?.avatarUrl || undefined} />
-                    <AvatarFallback className="text-3xl bg-[var(--bg-hover)] text-white font-bold">{user?.name.charAt(0) || "U"}</AvatarFallback>
+                    <AvatarFallback className="text-3xl bg-[var(--bg-hover)] text-[var(--text-primary)] font-bold">{user?.name.charAt(0) || "U"}</AvatarFallback>
                     <div className="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                       <UploadCloud className="w-8 h-8 text-white" />
                     </div>
                   </Avatar>
                   <div className="space-y-2 flex-1 w-full">
-                    <Label htmlFor="avatarUrl" className="text-white text-base">Avatar URL</Label>
+                    <Label htmlFor="avatarUrl" className="text-[var(--text-primary)] text-base">Avatar URL</Label>
                     <p className="text-xs text-[var(--text-secondary)] max-w-sm mb-3">Provide a URL to an image to use as your avatar. Leave blank to use initials.</p>
                     <Input 
                       id="avatarUrl" 
                       placeholder="https://example.com/avatar.jpg" 
                       {...register("avatarUrl")} 
-                      className="bg-[var(--bg-card)] border-[var(--border)] text-white focus-visible:ring-[var(--accent)] max-w-md h-10"
+                      className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus-visible:ring-[var(--accent)] max-w-md h-10"
                     />
                     {errors.avatarUrl && <p className="text-sm text-[var(--danger)]">{errors.avatarUrl.message}</p>}
                   </div>
@@ -132,17 +131,17 @@ export default function Settings() {
 
                 <div className="grid gap-6 max-w-2xl">
                   <div className="grid gap-2">
-                    <Label htmlFor="name" className="text-white">Full Name</Label>
+                    <Label htmlFor="name" className="text-[var(--text-primary)]">Full Name</Label>
                     <Input 
                       id="name" 
                       {...register("name")} 
-                      className="bg-[var(--bg-secondary)] border-[var(--border)] text-white focus-visible:ring-[var(--accent)] h-10"
+                      className="bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] focus-visible:ring-[var(--accent)] h-10"
                     />
                     {errors.name && <p className="text-sm text-[var(--danger)]">{errors.name.message}</p>}
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="email" className="text-white">Email Address</Label>
+                    <Label htmlFor="email" className="text-[var(--text-primary)]">Email Address</Label>
                     <Input 
                       id="email" 
                       value={user?.email || ""} 

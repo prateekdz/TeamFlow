@@ -1,7 +1,7 @@
 import { useGetDashboardSummary, useGetMyTasks, useGetOverdueTasks, useGetRecentActivity } from "@workspace/api-client-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Layout } from "@/components/layout";
-import { CheckCircle2, Clock, FolderKanban, Activity, AlertCircle, Plus, LayoutList, MoreHorizontal } from "lucide-react";
+import { CheckCircle2, Clock, FolderKanban, AlertCircle, Plus, LayoutList } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,6 @@ import { useUser } from "@clerk/react";
 export default function Dashboard() {
   const { data: summary, isLoading: isLoadingSummary } = useGetDashboardSummary();
   const { data: myTasks, isLoading: isLoadingTasks } = useGetMyTasks();
-  const { data: overdueTasks, isLoading: isLoadingOverdue } = useGetOverdueTasks();
   const { data: activity, isLoading: isLoadingActivity } = useGetRecentActivity();
   const { user } = useUser();
 
@@ -37,8 +36,8 @@ export default function Dashboard() {
   const getStatusBadge = (status: string) => {
     const s = status?.toLowerCase() || '';
     if (s === 'todo') return <span className="text-xs px-2.5 py-0.5 rounded-full border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] font-medium">To Do</span>;
-    if (s === 'in_progress') return <span className="text-xs px-2.5 py-0.5 rounded-full border border-blue-900 bg-blue-500/10 text-blue-400 font-medium">In Progress</span>;
-    if (s === 'done') return <span className="text-xs px-2.5 py-0.5 rounded-full border border-green-900 bg-[var(--success)]/10 text-[var(--success)] font-medium">Done</span>;
+    if (s === 'in_progress') return <span className="text-xs px-2.5 py-0.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-[var(--info)] font-medium">In Progress</span>;
+    if (s === 'done') return <span className="text-xs px-2.5 py-0.5 rounded-full border border-green-500/30 bg-[var(--success)]/10 text-[var(--success)] font-medium">Done</span>;
     if (s === 'cancelled') return <span className="text-xs px-2.5 py-0.5 rounded-full border border-[var(--border)] bg-[var(--bg-hover)] text-[var(--text-muted)] font-medium">Cancelled</span>;
     return <span className="text-xs px-2.5 py-0.5 rounded-full border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] font-medium">{status}</span>;
   };
@@ -48,7 +47,7 @@ export default function Dashboard() {
       <div className="flex flex-col gap-8 pb-10 fade-in zoom-in duration-300">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">
+            <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)]">
               {getGreeting()}, {user?.firstName || 'there'}
             </h1>
             <p className="text-[var(--text-secondary)] mt-1">{currentDate}</p>
@@ -72,7 +71,7 @@ export default function Dashboard() {
                 <div className="w-10 h-10 rounded-xl bg-[var(--accent-glow)] text-[var(--accent)] flex items-center justify-center">
                   <FolderKanban className="h-5 w-5" />
                 </div>
-                <div className="text-3xl font-bold text-white" data-testid="stat-projects">
+                <div className="text-3xl font-bold text-[var(--text-primary)]" data-testid="stat-projects">
                   {isLoadingSummary ? <Skeleton className="h-8 w-12 bg-[var(--bg-hover)]" /> : summary?.totalProjects || 0}
                 </div>
               </div>
@@ -87,7 +86,7 @@ export default function Dashboard() {
                 <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-[var(--info)] flex items-center justify-center">
                   <LayoutList className="h-5 w-5" />
                 </div>
-                <div className="text-3xl font-bold text-white" data-testid="stat-my-tasks">
+                <div className="text-3xl font-bold text-[var(--text-primary)]" data-testid="stat-my-tasks">
                   {isLoadingSummary ? <Skeleton className="h-8 w-12 bg-[var(--bg-hover)]" /> : summary?.myOpenTasks || 0}
                 </div>
               </div>
@@ -131,12 +130,12 @@ export default function Dashboard() {
             <Card className="flex-1 bg-[var(--bg-card)] border-[var(--border)] shadow-sm">
               <CardHeader className="border-b border-[var(--border)] pb-4 flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-lg font-semibold text-white">My Tasks</CardTitle>
+                  <CardTitle className="text-lg font-semibold text-[var(--text-primary)]">My Tasks</CardTitle>
                 </div>
                 <div className="flex bg-[var(--bg-secondary)] p-1 rounded-lg border border-[var(--border-subtle)]">
-                  <button className="px-3 py-1 text-xs font-medium rounded-md bg-[var(--accent-glow)] text-white">All</button>
-                  <button className="px-3 py-1 text-xs font-medium rounded-md text-[var(--text-secondary)] hover:text-white transition-colors">My Tasks</button>
-                  <button className="px-3 py-1 text-xs font-medium rounded-md text-[var(--text-secondary)] hover:text-white transition-colors">Overdue</button>
+                  <button className="px-3 py-1 text-xs font-medium rounded-md bg-[var(--accent-glow)] text-[var(--accent)]">All</button>
+                  <button className="px-3 py-1 text-xs font-medium rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">My Tasks</button>
+                  <button className="px-3 py-1 text-xs font-medium rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Overdue</button>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
@@ -158,9 +157,9 @@ export default function Dashboard() {
                             <div className="flex items-center gap-3 flex-1 min-w-0">
                               <div className={`w-2 h-2 rounded-full shrink-0 ${getPriorityColor(task.priority)}`} />
                               <div className="flex flex-col min-w-0">
-                                <span className="font-medium text-sm text-white group-hover:text-[var(--accent)] transition-colors truncate">{task.title}</span>
+                                <span className="font-medium text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors truncate">{task.title}</span>
                                 <div className="flex items-center gap-2 mt-1">
-                                  <span className="text-[10px] text-white px-2 py-0.5 rounded bg-[var(--bg-secondary)] truncate max-w-[120px]">{task.project.name}</span>
+                                  <span className="text-[10px] text-[var(--text-secondary)] px-2 py-0.5 rounded bg-[var(--bg-secondary)] truncate max-w-[120px] border border-[var(--border-subtle)]">{task.project.name}</span>
                                   {task.dueDate && (
                                     <span className={`text-xs flex items-center gap-1 ${isOverdue ? 'text-[var(--danger)]' : 'text-[var(--text-muted)]'}`}>
                                       <Clock className="w-3 h-3" />
@@ -173,7 +172,7 @@ export default function Dashboard() {
                             <div className="flex items-center gap-4 shrink-0">
                               {getStatusBadge(task.status)}
                               <Avatar className="h-6 w-6 border border-[var(--border)]">
-                                <AvatarFallback className="bg-[var(--bg-secondary)] text-[10px]">{task.assignee?.name?.charAt(0) || '?'}</AvatarFallback>
+                                <AvatarFallback className="bg-[var(--bg-secondary)] text-[10px] text-[var(--text-secondary)]">{task.assignee?.name?.charAt(0) || '?'}</AvatarFallback>
                               </Avatar>
                             </div>
                           </div>
@@ -198,7 +197,7 @@ export default function Dashboard() {
           <div className="col-span-1 flex flex-col gap-6">
             <Card className="flex-1 bg-[var(--bg-card)] border-[var(--border)] shadow-sm">
               <CardHeader className="border-b border-[var(--border)] pb-4">
-                <CardTitle className="text-lg font-semibold text-white">Recent Activity</CardTitle>
+                <CardTitle className="text-lg font-semibold text-[var(--text-primary)]">Recent Activity</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 {isLoadingActivity ? (
@@ -207,30 +206,27 @@ export default function Dashboard() {
                   </div>
                 ) : activity && activity.length > 0 ? (
                   <div className="flex flex-col p-4 relative">
-                    {/* Timeline line */}
                     <div className="absolute left-[31px] top-6 bottom-6 w-px bg-[var(--border)] z-0" />
                     
-                    {activity.map((item, i) => {
+                    {activity.map((item) => {
                       const isCreate = item.action.includes('created');
                       const isUpdate = item.action.includes('updated');
-                      const isDelete = item.action.includes('deleted');
                       
                       let borderColor = 'border-[var(--border)]';
                       if (isCreate) borderColor = 'border-[var(--success)]';
                       else if (isUpdate) borderColor = 'border-[var(--info)]';
-                      else if (isDelete) borderColor = 'border-[var(--danger)]';
 
                       return (
                         <div key={item.id} className="flex gap-4 items-start relative z-10 mb-6 last:mb-0" data-testid={`activity-${item.id}`}>
                           <Avatar className={`w-8 h-8 shrink-0 border-2 ${borderColor} bg-[var(--bg-card)]`}>
                             <AvatarImage src={item.actorAvatarUrl || undefined} />
-                            <AvatarFallback className="text-[10px] bg-[var(--bg-secondary)]">{item.actorName.charAt(0)}</AvatarFallback>
+                            <AvatarFallback className="text-[10px] bg-[var(--bg-secondary)] text-[var(--text-secondary)]">{item.actorName.charAt(0)}</AvatarFallback>
                           </Avatar>
                           <div className="flex flex-col bg-[var(--bg-secondary)] rounded-lg p-3 w-full border border-[var(--border-subtle)]">
                             <p className="text-sm text-[var(--text-secondary)]">
-                              <span className="font-medium text-white">{item.actorName}</span>{" "}
+                              <span className="font-medium text-[var(--text-primary)]">{item.actorName}</span>{" "}
                               {item.action}{" "}
-                              <Link href={`/projects/${item.projectId}/tasks/${item.taskId}`} className="font-medium text-white hover:text-[var(--accent)] transition-colors">
+                              <Link href={`/projects/${item.projectId}/tasks/${item.taskId}`} className="font-medium text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
                                 {item.taskTitle}
                               </Link>
                             </p>

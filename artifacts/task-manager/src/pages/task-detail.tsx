@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Clock, Calendar, AlertCircle, ArrowUpCircle, ArrowDownCircle, Circle, CheckCircle2, User, Activity as ActivityIcon } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, AlertCircle, ArrowUpCircle, ArrowDownCircle, Circle, User, Activity as ActivityIcon, Settings } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -55,7 +55,6 @@ export default function TaskDetail() {
 
   const updateTaskMutation = useUpdateTask();
 
-  // Inline editing state
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [isEditingDesc, setIsEditingDesc] = useState(false);
@@ -150,7 +149,7 @@ export default function TaskDetail() {
           <div className="w-16 h-16 bg-[var(--bg-secondary)] rounded-full flex items-center justify-center mb-4 text-[var(--text-muted)]">
             <AlertCircle className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Task not found</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Task not found</h2>
           <p className="text-[var(--text-secondary)] mb-6">The task you're looking for doesn't exist or you don't have access.</p>
           <Button className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white" onClick={() => window.history.back()}>Go Back</Button>
         </div>
@@ -162,15 +161,15 @@ export default function TaskDetail() {
     <Layout>
       <div className="max-w-5xl mx-auto flex flex-col gap-6 pb-10 fade-in duration-300">
         <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
-          <Link href="/projects" className="hover:text-white transition-colors">Projects</Link>
+          <Link href="/projects" className="hover:text-[var(--text-primary)] transition-colors">Projects</Link>
           <span>/</span>
           {project ? (
-            <Link href={`/projects/${project.id}`} className="hover:text-white transition-colors font-medium">{project.name}</Link>
+            <Link href={`/projects/${project.id}`} className="hover:text-[var(--text-primary)] transition-colors font-medium">{project.name}</Link>
           ) : (
             <Skeleton className="h-4 w-20 bg-[var(--bg-hover)]" />
           )}
           <span>/</span>
-          <span className="font-mono text-[10px] tracking-wider text-white bg-[var(--bg-secondary)] px-2 py-0.5 rounded border border-[var(--border-subtle)]">T-{task.id}</span>
+          <span className="font-mono text-[10px] tracking-wider text-[var(--text-secondary)] bg-[var(--bg-secondary)] px-2 py-0.5 rounded border border-[var(--border-subtle)]">T-{task.id}</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -190,11 +189,11 @@ export default function TaskDetail() {
                       setEditTitle(task.title);
                     }
                   }}
-                  className="text-3xl md:text-4xl font-extrabold h-auto py-2 px-3 bg-[var(--bg-secondary)] border-[var(--accent)] text-white focus-visible:ring-[var(--accent)]"
+                  className="text-3xl md:text-4xl font-extrabold h-auto py-2 px-3 bg-[var(--bg-secondary)] border-[var(--accent)] text-[var(--text-primary)] focus-visible:ring-[var(--accent)]"
                 />
               ) : (
                 <h1 
-                  className={`text-3xl md:text-4xl font-extrabold tracking-tight hover:bg-[var(--bg-hover)] p-2 -ml-2 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-[var(--border)] text-white ${task.status === 'done' ? 'text-[var(--text-muted)] line-through decoration-[var(--border-subtle)]' : ''}`}
+                  className={`text-3xl md:text-4xl font-extrabold tracking-tight hover:bg-[var(--bg-hover)] p-2 -ml-2 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-[var(--border)] ${task.status === 'done' ? 'text-[var(--text-muted)] line-through' : 'text-[var(--text-primary)]'}`}
                   onClick={() => setIsEditingTitle(true)}
                   data-testid="task-title-display"
                 >
@@ -213,11 +212,11 @@ export default function TaskDetail() {
                     ref={descInputRef}
                     value={editDesc}
                     onChange={(e) => setEditDesc(e.target.value)}
-                    className="min-h-[200px] resize-y bg-transparent border-none focus-visible:ring-0 text-white text-base leading-relaxed"
+                    className="min-h-[200px] resize-y bg-transparent border-none focus-visible:ring-0 text-[var(--text-primary)] text-base leading-relaxed"
                     placeholder="Describe the task in detail..."
                   />
                   <div className="flex gap-2 justify-end px-2 pb-2">
-                    <Button variant="ghost" className="text-[var(--text-secondary)] hover:text-white" onClick={() => {
+                    <Button variant="ghost" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]" onClick={() => {
                       setIsEditingDesc(false);
                       setEditDesc(task.description || "");
                     }}>Cancel</Button>
@@ -226,7 +225,7 @@ export default function TaskDetail() {
                 </div>
               ) : (
                 <div 
-                  className="prose dark:prose-invert max-w-none text-base leading-relaxed p-5 border border-[var(--border)] rounded-xl bg-[var(--bg-card)] hover:border-[var(--border-subtle)] hover:bg-[var(--bg-hover)] cursor-pointer min-h-[120px] transition-all text-[var(--text-primary)]"
+                  className="prose max-w-none text-base leading-relaxed p-5 border border-[var(--border)] rounded-xl bg-[var(--bg-card)] hover:border-[var(--accent)]/30 hover:bg-[var(--bg-hover)] cursor-pointer min-h-[120px] transition-all text-[var(--text-primary)]"
                   onClick={() => setIsEditingDesc(true)}
                 >
                   {task.description ? (
@@ -246,7 +245,7 @@ export default function TaskDetail() {
                 <div className="w-10 h-10 rounded-full bg-[var(--bg-secondary)] flex items-center justify-center mb-3">
                   <ActivityIcon className="w-5 h-5 text-[var(--text-muted)]" />
                 </div>
-                <p className="text-sm font-medium text-white">Activity feed coming soon</p>
+                <p className="text-sm font-medium text-[var(--text-primary)]">Activity feed coming soon</p>
                 <p className="text-xs text-[var(--text-secondary)] mt-1">Comments and history will appear here.</p>
               </div>
             </div>
@@ -257,7 +256,7 @@ export default function TaskDetail() {
             <div className="flex flex-col gap-5 p-6 bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl shadow-lg">
               <div className="flex items-center gap-2 mb-2 pb-4 border-b border-[var(--border)]">
                 <Settings className="w-4 h-4 text-[var(--text-muted)]" />
-                <h3 className="font-semibold text-white">Properties</h3>
+                <h3 className="font-semibold text-[var(--text-primary)]">Properties</h3>
               </div>
 
               <div className="flex flex-col gap-2">
@@ -266,30 +265,14 @@ export default function TaskDetail() {
                   value={task.status} 
                   onValueChange={(val: any) => handleUpdate({ status: val })}
                 >
-                  <SelectTrigger className="h-10 w-full bg-[var(--bg-secondary)] border-[var(--border)] text-white focus:ring-[var(--accent)]" data-testid="select-update-status">
+                  <SelectTrigger className="h-10 w-full bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] focus:ring-[var(--accent)]" data-testid="select-update-status">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
-                    <SelectItem value="todo">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-[var(--text-muted)]" /> To Do
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="in_progress">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-blue-500" /> In Progress
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="done">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-[var(--success)]" /> Done
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="cancelled">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full border border-[var(--text-muted)]" /> Cancelled
-                      </div>
-                    </SelectItem>
+                  <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)]">
+                    <SelectItem value="todo"><div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[var(--text-muted)]" /> To Do</div></SelectItem>
+                    <SelectItem value="in_progress"><div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-blue-500" /> In Progress</div></SelectItem>
+                    <SelectItem value="done"><div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[var(--success)]" /> Done</div></SelectItem>
+                    <SelectItem value="cancelled"><div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full border border-[var(--text-muted)]" /> Cancelled</div></SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -300,33 +283,17 @@ export default function TaskDetail() {
                   value={task.priority} 
                   onValueChange={(val: any) => handleUpdate({ priority: val })}
                 >
-                  <SelectTrigger className="h-10 w-full bg-[var(--bg-secondary)] border-[var(--border)] text-white focus:ring-[var(--accent)]">
+                  <SelectTrigger className="h-10 w-full bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] focus:ring-[var(--accent)]">
                     <div className="flex items-center gap-2">
                       {PRIORITY_ICONS[task.priority as keyof typeof PRIORITY_ICONS]}
                       <span className="capitalize">{task.priority}</span>
                     </div>
                   </SelectTrigger>
-                  <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
-                    <SelectItem value="low">
-                      <div className="flex items-center gap-2">
-                        {PRIORITY_ICONS.low} Low
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="medium">
-                      <div className="flex items-center gap-2">
-                        {PRIORITY_ICONS.medium} Medium
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="high">
-                      <div className="flex items-center gap-2">
-                        {PRIORITY_ICONS.high} High
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="urgent">
-                      <div className="flex items-center gap-2">
-                        {PRIORITY_ICONS.urgent} Urgent
-                      </div>
-                    </SelectItem>
+                  <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)]">
+                    <SelectItem value="low"><div className="flex items-center gap-2">{PRIORITY_ICONS.low} Low</div></SelectItem>
+                    <SelectItem value="medium"><div className="flex items-center gap-2">{PRIORITY_ICONS.medium} Medium</div></SelectItem>
+                    <SelectItem value="high"><div className="flex items-center gap-2">{PRIORITY_ICONS.high} High</div></SelectItem>
+                    <SelectItem value="urgent"><div className="flex items-center gap-2">{PRIORITY_ICONS.urgent} Urgent</div></SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -337,12 +304,12 @@ export default function TaskDetail() {
                   value={task.assigneeId?.toString() || "unassigned"} 
                   onValueChange={(val) => handleUpdate({ assigneeId: val === "unassigned" ? null : parseInt(val) })}
                 >
-                  <SelectTrigger className="h-10 w-full bg-[var(--bg-secondary)] border-[var(--border)] text-white focus:ring-[var(--accent)]">
+                  <SelectTrigger className="h-10 w-full bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] focus:ring-[var(--accent)]">
                     {task.assignee ? (
                       <div className="flex items-center gap-2 truncate">
                         <Avatar className="h-6 w-6 border border-[var(--border)]">
                           <AvatarImage src={task.assignee.avatarUrl || undefined} />
-                          <AvatarFallback className="text-[10px] bg-[var(--bg-card)]">{task.assignee.name.charAt(0)}</AvatarFallback>
+                          <AvatarFallback className="text-[10px] bg-[var(--bg-card)] text-[var(--text-secondary)]">{task.assignee.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <span className="text-sm truncate font-medium">{task.assignee.name}</span>
                       </div>
@@ -355,14 +322,14 @@ export default function TaskDetail() {
                       </div>
                     )}
                   </SelectTrigger>
-                  <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
+                  <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)]">
                     <SelectItem value="unassigned">Unassigned</SelectItem>
                     {members?.map(m => (
                       <SelectItem key={m.id} value={m.userId.toString()}>
                         <div className="flex items-center gap-2 py-1">
                           <Avatar className="h-6 w-6 border border-[var(--border)]">
                             <AvatarImage src={m.user.avatarUrl || undefined} />
-                            <AvatarFallback className="text-[10px] bg-[var(--bg-secondary)]">{m.user.name.charAt(0)}</AvatarFallback>
+                            <AvatarFallback className="text-[10px] bg-[var(--bg-secondary)] text-[var(--text-secondary)]">{m.user.name.charAt(0)}</AvatarFallback>
                           </Avatar>
                           <span className="font-medium">{m.user.name}</span>
                         </div>
@@ -374,7 +341,7 @@ export default function TaskDetail() {
               
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Due Date</span>
-                <Button variant="outline" className="w-full justify-start text-left font-normal bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-white h-10">
+                <Button variant="outline" className="w-full justify-start text-left font-normal bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] h-10">
                   <Calendar className="mr-2 h-4 w-4" />
                   {task.dueDate ? format(new Date(task.dueDate), "PPP") : <span>Set date</span>}
                 </Button>
@@ -384,13 +351,13 @@ export default function TaskDetail() {
             <div className="flex flex-col gap-3 text-sm text-[var(--text-secondary)] p-5 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] shadow-sm">
               <div className="flex justify-between items-center border-b border-[var(--border)] pb-3">
                 <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-[var(--text-muted)]" /> Created</span>
-                <span className="font-medium text-white">{format(new Date(task.createdAt), "MMM d, yyyy")}</span>
+                <span className="font-medium text-[var(--text-primary)]">{format(new Date(task.createdAt), "MMM d, yyyy")}</span>
               </div>
               <div className="flex justify-between items-center pt-1">
                 <span className="flex items-center gap-2"><User className="w-4 h-4 text-[var(--text-muted)]" /> Reporter</span>
-                <div className="flex items-center gap-2 font-medium text-white bg-[var(--bg-secondary)] px-2 py-1 rounded-md border border-[var(--border-subtle)]">
+                <div className="flex items-center gap-2 font-medium text-[var(--text-primary)] bg-[var(--bg-secondary)] px-2 py-1 rounded-md border border-[var(--border-subtle)]">
                   <Avatar className="h-5 w-5">
-                    <AvatarFallback className="text-[10px] bg-[var(--bg-card)]">
+                    <AvatarFallback className="text-[10px] bg-[var(--bg-card)] text-[var(--text-secondary)]">
                       {(task as any).createdBy?.name?.charAt(0) || "?"}
                     </AvatarFallback>
                   </Avatar>

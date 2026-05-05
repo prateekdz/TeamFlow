@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useListProjects, useCreateProject, getListProjectsQueryKey } from "@workspace/api-client-react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Layout } from "@/components/layout";
-import { FolderKanban, Plus, MoreVertical, LayoutGrid, CheckCircle2, Clock } from "lucide-react";
+import { FolderKanban, Plus, LayoutGrid, CheckCircle2, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -34,14 +34,14 @@ const createProjectSchema = z.object({
 type CreateProjectFormValues = z.infer<typeof createProjectSchema>;
 
 const PRESET_COLORS = [
-  "#6c63ff", // Primary accent
-  "#3B82F6", // Blue
-  "#10B981", // Green
-  "#F59E0B", // Yellow
-  "#EF4444", // Red
-  "#8B5CF6", // Purple
-  "#EC4899", // Pink
-  "#14B8A6", // Teal
+  "#6c63ff",
+  "#3B82F6",
+  "#10B981",
+  "#F59E0B",
+  "#EF4444",
+  "#8B5CF6",
+  "#EC4899",
+  "#14B8A6",
 ];
 
 export default function Projects() {
@@ -89,7 +89,7 @@ export default function Projects() {
       <div className="flex flex-col gap-8 pb-10 fade-in zoom-in duration-300">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Projects</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)]">Projects</h1>
             <p className="text-[var(--text-secondary)] mt-1">Manage all your team's projects in one place.</p>
           </div>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
@@ -99,38 +99,38 @@ export default function Projects() {
                 New Project
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-[var(--bg-card)] border-[var(--border)] text-white sm:max-w-[425px]">
+            <DialogContent className="bg-[var(--bg-card)] border-[var(--border)] sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>Create New Project</DialogTitle>
+                <DialogTitle className="text-[var(--text-primary)]">Create New Project</DialogTitle>
                 <DialogDescription className="text-[var(--text-secondary)]">
                   Add a new project to track tasks and collaborate with your team.
                 </DialogDescription>
               </DialogHeader>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 py-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-white">Name</Label>
+                  <Label htmlFor="name" className="text-[var(--text-primary)]">Name</Label>
                   <Input 
                     id="name" 
                     placeholder="Project name" 
                     {...register("name")} 
                     data-testid="input-project-name" 
-                    className="bg-[var(--bg-secondary)] border-[var(--border)] text-white focus-visible:ring-[var(--accent)]"
+                    className="bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus-visible:ring-[var(--accent)]"
                   />
                   {errors.name && <p className="text-sm text-[var(--danger)]">{errors.name.message}</p>}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description" className="text-white">Description</Label>
+                  <Label htmlFor="description" className="text-[var(--text-primary)]">Description</Label>
                   <Textarea 
                     id="description" 
                     placeholder="Brief description of the project" 
                     {...register("description")} 
                     data-testid="input-project-desc" 
-                    className="bg-[var(--bg-secondary)] border-[var(--border)] text-white focus-visible:ring-[var(--accent)] resize-none h-24"
+                    className="bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus-visible:ring-[var(--accent)] resize-none h-24"
                   />
                   {errors.description && <p className="text-sm text-[var(--danger)]">{errors.description.message}</p>}
                 </div>
                 <div className="space-y-3">
-                  <Label className="text-white">Project Color</Label>
+                  <Label className="text-[var(--text-primary)]">Project Color</Label>
                   <div className="flex flex-wrap gap-3">
                     {PRESET_COLORS.map((color) => (
                       <button
@@ -147,7 +147,7 @@ export default function Projects() {
                   </div>
                 </div>
                 <DialogFooter className="pt-4 border-t border-[var(--border)]">
-                  <Button type="button" variant="outline" onClick={() => setIsCreateOpen(false)} className="border-[var(--border)] hover:bg-[var(--bg-hover)] hover:text-white">
+                  <Button type="button" variant="outline" onClick={() => setIsCreateOpen(false)} className="border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]">
                     Cancel
                   </Button>
                   <Button type="submit" disabled={createProjectMutation.isPending} className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white" data-testid="button-submit-project">
@@ -187,11 +187,11 @@ export default function Projects() {
               
               return (
                 <Link key={project.id} href={`/projects/${project.id}`}>
-                  <Card className="overflow-hidden bg-[var(--bg-card)] border-[var(--border)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:-translate-y-1 cursor-pointer h-full flex flex-col group" data-testid={`project-card-${project.id}`}>
+                  <Card className="overflow-hidden bg-[var(--bg-card)] border-[var(--border)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)] hover:-translate-y-1 cursor-pointer h-full flex flex-col group" data-testid={`project-card-${project.id}`}>
                     <div className="h-1.5 w-full transition-all duration-300 group-hover:h-2" style={{ backgroundColor: project.color || 'var(--accent)' }} />
                     <CardHeader className="pb-3 flex-none">
                       <div className="flex justify-between items-start">
-                        <CardTitle className="text-lg font-bold text-white group-hover:text-[var(--accent)] transition-colors line-clamp-1">{project.name}</CardTitle>
+                        <CardTitle className="text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors line-clamp-1">{project.name}</CardTitle>
                         <span className="text-[10px] uppercase tracking-wider px-2 py-1 rounded bg-[var(--bg-secondary)] text-[var(--text-secondary)] font-semibold border border-[var(--border-subtle)]">
                           {project.myRole}
                         </span>
@@ -199,14 +199,14 @@ export default function Projects() {
                       {project.description ? (
                         <CardDescription className="line-clamp-2 mt-2 text-[var(--text-secondary)] text-sm">{project.description}</CardDescription>
                       ) : (
-                        <div className="h-10 mt-2" /> // spacer
+                        <div className="h-10 mt-2" />
                       )}
                     </CardHeader>
                     <CardContent className="pb-5 flex-1 flex flex-col justify-end">
                       <div className="space-y-2 mt-auto">
                         <div className="flex justify-between text-xs mb-1">
                           <span className="text-[var(--text-muted)] font-medium">Progress</span>
-                          <span className="font-semibold text-white">{progress}%</span>
+                          <span className="font-semibold text-[var(--text-primary)]">{progress}%</span>
                         </div>
                         <Progress value={progress} className="h-1.5 bg-[var(--bg-secondary)]" indicatorClassName="bg-gradient-to-r from-[var(--accent)] to-[var(--info)]" />
                       </div>
@@ -235,7 +235,7 @@ export default function Projects() {
             <div className="w-16 h-16 bg-[var(--accent-glow)] text-[var(--accent)] rounded-full flex items-center justify-center mb-4">
               <FolderKanban className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">No projects yet</h3>
+            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">No projects yet</h3>
             <p className="text-[var(--text-secondary)] max-w-md mb-8">
               Create your first project to start organizing tasks and collaborating with your team.
             </p>

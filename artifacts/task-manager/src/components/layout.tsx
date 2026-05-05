@@ -52,7 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="h-14 flex items-center justify-between px-4 border-b border-[var(--border)]">
           <div className={`flex items-center gap-2 overflow-hidden ${collapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"}`}>
             <img src={`${basePath}/logo.svg`} alt="Logo" className="w-6 h-6 shrink-0" />
-            <span className="font-bold tracking-tight text-white">TeamFlow</span>
+            <span className="font-bold tracking-tight text-[var(--text-primary)]">TeamFlow</span>
           </div>
           {collapsed && (
             <div className="w-full flex justify-center">
@@ -62,7 +62,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <Button 
             variant="ghost" 
             size="icon" 
-            className={`shrink-0 h-8 w-8 text-[var(--text-secondary)] hover:text-white hidden md:flex ${collapsed ? "hidden" : ""}`}
+            className={`shrink-0 h-8 w-8 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hidden md:flex ${collapsed ? "hidden" : ""}`}
             onClick={() => setCollapsed(!collapsed)}
           >
             <ChevronLeft className="w-4 h-4" />
@@ -83,8 +83,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   collapsed ? "justify-center w-9 mx-auto" : "px-3 gap-3 w-full"
                 } ${
                   isActive
-                    ? "bg-[var(--accent-glow)] border-l-2 border-[var(--accent)] text-white"
-                    : "text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-white border-l-2 border-transparent"
+                    ? "bg-[var(--accent-glow)] border-l-2 border-[var(--accent)] text-[var(--accent)]"
+                    : "text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] border-l-2 border-transparent"
                 }`}
               >
                 <item.icon className="w-4 h-4 shrink-0" />
@@ -199,7 +199,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-[var(--bg-card)] border-[var(--border)] text-white">
+              <DropdownMenuContent align="end" className="w-56 bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)]">
                 <div className="flex items-center gap-2 p-2">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user?.imageUrl} />

@@ -12,10 +12,9 @@ import {
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Mail, Shield, User, Trash2, MoreVertical, Plus } from "lucide-react";
+import { ArrowLeft, Mail, Shield, Trash2, MoreVertical, Plus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -129,46 +128,46 @@ export default function ProjectMembers() {
       <div className="flex flex-col gap-8 pb-10 max-w-4xl mx-auto w-full fade-in duration-300">
         <div className="flex flex-col gap-4 border-b border-[var(--border)] pb-6">
           <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] mb-1">
-            <Link href={`/projects/${project.id}`} className="hover:text-white transition-colors flex items-center">
+            <Link href={`/projects/${project.id}`} className="hover:text-[var(--text-primary)] transition-colors flex items-center">
               <ArrowLeft className="w-3.5 h-3.5 mr-1" />
               Back to {project.name}
             </Link>
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+            <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] flex items-center gap-3">
               Team Members
               <span className="text-sm font-normal px-2.5 py-0.5 rounded-full bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-subtle)] align-middle">
                 {members?.length || 0}
               </span>
             </h1>
-            <p className="text-[var(--text-secondary)] mt-1">Manage who has access to <span className="text-white font-medium">{project.name}</span>.</p>
+            <p className="text-[var(--text-secondary)] mt-1">Manage who has access to <span className="text-[var(--text-primary)] font-medium">{project.name}</span>.</p>
           </div>
         </div>
 
         {isAdmin && (
           <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
               <Plus className="w-5 h-5 text-[var(--accent)]" /> Add New Member
             </h2>
             <form onSubmit={handleInvite} className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
               <div className="flex-1 w-full space-y-2">
-                <label className="text-sm font-medium text-white">Email Address</label>
+                <label className="text-sm font-medium text-[var(--text-primary)]">Email Address</label>
                 <Input 
                   type="email" 
                   placeholder="colleague@example.com" 
                   value={emailToInvite}
                   onChange={(e) => setEmailToInvite(e.target.value)}
-                  className="bg-[var(--bg-secondary)] border-[var(--border)] text-white focus-visible:ring-[var(--accent)] h-10"
+                  className="bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus-visible:ring-[var(--accent)] h-10"
                 />
               </div>
               <div className="w-full sm:w-auto flex gap-3">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-white block">Role</label>
+                  <label className="text-sm font-medium text-[var(--text-primary)] block">Role</label>
                   <Select value={inviteRole} onValueChange={(val: any) => setInviteRole(val)}>
-                    <SelectTrigger className="w-[120px] bg-[var(--bg-secondary)] border-[var(--border)] text-white h-10 focus:ring-[var(--accent)]">
+                    <SelectTrigger className="w-[120px] bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)] h-10 focus:ring-[var(--accent)]">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
+                    <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)]">
                       <SelectItem value="member">Member</SelectItem>
                       <SelectItem value="admin">Admin</SelectItem>
                     </SelectContent>
@@ -185,19 +184,19 @@ export default function ProjectMembers() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {members?.map((member) => (
-            <div key={member.id} className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5 flex items-start justify-between group hover:border-[var(--border-subtle)] hover:shadow-md transition-all">
+            <div key={member.id} className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5 flex items-start justify-between group hover:border-[var(--accent)]/30 hover:shadow-md transition-all">
               <div className="flex items-center gap-4 min-w-0">
                 <Avatar className="h-12 w-12 border border-[var(--border)] shadow-sm shrink-0">
                   <AvatarImage src={member.user.avatarUrl || undefined} />
-                  <AvatarFallback className="bg-[var(--bg-secondary)] text-white font-medium">{member.user.name.charAt(0)}</AvatarFallback>
+                  <AvatarFallback className="bg-[var(--bg-secondary)] text-[var(--text-primary)] font-medium">{member.user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col min-w-0">
-                  <span className="font-semibold text-white truncate flex items-center gap-2">
+                  <span className="font-semibold text-[var(--text-primary)] truncate flex items-center gap-2">
                     {member.user.name}
                   </span>
                   <span className="text-sm text-[var(--text-secondary)] truncate">{member.user.email}</span>
                   <div className="flex items-center gap-3 mt-2">
-                    <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-semibold border ${member.role === 'admin' ? 'bg-[var(--accent-glow)] text-[var(--accent)] border-[var(--accent)]/20' : 'bg-blue-500/10 text-blue-400 border-blue-900/30'}`}>
+                    <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-semibold border ${member.role === 'admin' ? 'bg-[var(--accent-glow)] text-[var(--accent)] border-[var(--accent)]/20' : 'bg-blue-500/10 text-[var(--info)] border-blue-500/20'}`}>
                       {member.role === 'admin' && <Shield className="w-3 h-3 inline mr-1 -mt-0.5" />}
                       {member.role}
                     </span>
@@ -211,11 +210,11 @@ export default function ProjectMembers() {
               {isAdmin && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-[var(--text-muted)] hover:text-white opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-[var(--text-muted)] hover:text-[var(--text-primary)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                       <MoreVertical className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-[var(--bg-card)] border-[var(--border)] text-white w-48">
+                  <DropdownMenuContent align="end" className="bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-primary)] w-48">
                     <DropdownMenuItem className="cursor-pointer hover:bg-[var(--bg-hover)]" onClick={() => handleUpdateRole(member.id, member.role === "admin" ? "member" : "admin")}>
                       <Shield className="w-4 h-4 mr-2" />
                       Make {member.role === "admin" ? "Member" : "Admin"}

@@ -11,14 +11,14 @@ export default function Landing() {
         <Redirect to="/dashboard" />
       </Show>
       <Show when="signed-out">
-        <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col text-white">
+        <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col text-[var(--text-primary)]">
           <header className="px-6 h-16 flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-secondary)]">
             <div className="flex items-center gap-2">
               <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Logo" className="w-6 h-6" />
-              <span className="font-bold text-lg tracking-tight">TeamFlow</span>
+              <span className="font-bold text-lg tracking-tight text-[var(--text-primary)]">TeamFlow</span>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/sign-in" className="text-sm font-medium text-[var(--text-secondary)] hover:text-white transition-colors">
+              <Link href="/sign-in" className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
                 Sign In
               </Link>
               <Link href="/sign-up">
@@ -34,7 +34,7 @@ export default function Landing() {
               <div className="inline-flex items-center rounded-full border border-[var(--border)] px-3 py-1 text-xs font-semibold bg-[var(--bg-card)] text-[var(--accent)] mb-8 shadow-sm">
                 Next-generation tooling
               </div>
-              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter max-w-4xl mb-6 leading-tight">
+              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter max-w-4xl mb-6 leading-tight text-[var(--text-primary)]">
                 The collaborative cockpit for teams who <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-[var(--info)]">ship things.</span>
               </h1>
               <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mb-10 leading-relaxed">
@@ -42,12 +42,12 @@ export default function Landing() {
               </p>
               <div className="flex gap-4">
                 <Link href="/sign-up">
-                  <Button size="lg" className="h-12 px-8 text-base bg-[var(--accent)] hover:bg-[var(--accent-hover)] border-none shadow-[0_4px_14px_rgba(108,99,255,0.4)]">
+                  <Button size="lg" className="h-12 px-8 text-base bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white border-none shadow-[0_4px_14px_rgba(108,99,255,0.4)]">
                     Start Building Now
                   </Button>
                 </Link>
                 <Link href="/sign-in">
-                  <Button size="lg" variant="outline" className="h-12 px-8 text-base border-[var(--border)] text-white hover:bg-[var(--bg-hover)]">
+                  <Button size="lg" variant="outline" className="h-12 px-8 text-base border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]">
                     Sign In
                   </Button>
                 </Link>
@@ -59,21 +59,21 @@ export default function Landing() {
                 <div className="w-12 h-12 rounded-xl bg-[var(--accent-glow)] text-[var(--accent)] flex items-center justify-center">
                   <Layout className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-xl text-white">Dense Organization</h3>
+                <h3 className="font-bold text-xl text-[var(--text-primary)]">Dense Organization</h3>
                 <p className="text-[var(--text-secondary)] text-sm leading-relaxed">Everything exactly where you expect it. High information density without the clutter. Built for professionals.</p>
               </div>
               <div className="flex flex-col gap-4 p-8 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] shadow-lg hover:-translate-y-1 transition-transform duration-300">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-[var(--info)] flex items-center justify-center">
                   <Zap className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-xl text-white">Lightning Fast</h3>
+                <h3 className="font-bold text-xl text-[var(--text-primary)]">Lightning Fast</h3>
                 <p className="text-[var(--text-secondary)] text-sm leading-relaxed">Optimized for speed. Create, edit, and navigate through your tasks without any friction or loading states.</p>
               </div>
               <div className="flex flex-col gap-4 p-8 rounded-2xl border border-[var(--border)] bg-[var(--bg-card)] shadow-lg hover:-translate-y-1 transition-transform duration-300">
-                <div className="w-12 h-12 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-green-500/10 text-[var(--success)] flex items-center justify-center">
                   <Users className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-xl text-white">Team Alignment</h3>
+                <h3 className="font-bold text-xl text-[var(--text-primary)]">Team Alignment</h3>
                 <p className="text-[var(--text-secondary)] text-sm leading-relaxed">Built-in roles, activity feeds, and shared contexts to keep everyone on the same page continuously.</p>
               </div>
             </div>
