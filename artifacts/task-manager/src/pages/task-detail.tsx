@@ -21,16 +21,16 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Clock, Calendar, AlertCircle, ArrowUpCircle, ArrowDownCircle, Circle, CheckCircle2, User } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, AlertCircle, ArrowUpCircle, ArrowDownCircle, Circle, CheckCircle2, User, Activity as ActivityIcon } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
 const PRIORITY_ICONS = {
-  low: <ArrowDownCircle className="w-4 h-4 text-blue-500" />,
-  medium: <Circle className="w-4 h-4 text-yellow-500" />,
-  high: <ArrowUpCircle className="w-4 h-4 text-orange-500" />,
-  urgent: <AlertCircle className="w-4 h-4 text-red-500" />
+  low: <ArrowDownCircle className="w-4 h-4 text-[var(--text-muted)]" />,
+  medium: <Circle className="w-4 h-4 text-[var(--info)]" />,
+  high: <ArrowUpCircle className="w-4 h-4 text-[var(--warning)]" />,
+  urgent: <AlertCircle className="w-4 h-4 text-[var(--danger)]" />
 };
 
 export default function TaskDetail() {
@@ -84,7 +84,6 @@ export default function TaskDetail() {
   }, [isEditingDesc]);
 
   const handleUpdate = (updates: any) => {
-    // Optimistic local update could go here
     updateTaskMutation.mutate(
       { projectId, taskId, data: updates },
       {
@@ -123,15 +122,22 @@ export default function TaskDetail() {
   if (isLoadingTask) {
     return (
       <Layout>
-        <div className="space-y-6 max-w-4xl mx-auto">
-          <Skeleton className="h-4 w-1/4" />
-          <Skeleton className="h-12 w-3/4" />
-          <div className="flex gap-4 border-b pb-6">
-            <Skeleton className="h-10 w-32" />
-            <Skeleton className="h-10 w-32" />
-            <Skeleton className="h-10 w-32" />
+        <div className="space-y-6 max-w-5xl mx-auto fade-in duration-300">
+          <Skeleton className="h-4 w-1/4 bg-[var(--bg-hover)]" />
+          <Skeleton className="h-14 w-3/4 bg-[var(--bg-hover)]" />
+          <div className="flex gap-4 border-b border-[var(--border)] pb-6">
+            <Skeleton className="h-10 w-32 bg-[var(--bg-hover)]" />
+            <Skeleton className="h-10 w-32 bg-[var(--bg-hover)]" />
+            <Skeleton className="h-10 w-32 bg-[var(--bg-hover)]" />
           </div>
-          <Skeleton className="h-32 w-full" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <Skeleton className="h-64 w-full bg-[var(--bg-hover)]" />
+            </div>
+            <div>
+              <Skeleton className="h-96 w-full bg-[var(--bg-hover)] rounded-xl" />
+            </div>
+          </div>
         </div>
       </Layout>
     );
@@ -140,9 +146,13 @@ export default function TaskDetail() {
   if (!task) {
     return (
       <Layout>
-        <div className="text-center py-20">
-          <h2 className="text-2xl font-bold">Task not found</h2>
-          <Button className="mt-4" onClick={() => window.history.back()}>Go Back</Button>
+        <div className="text-center py-20 flex flex-col items-center">
+          <div className="w-16 h-16 bg-[var(--bg-secondary)] rounded-full flex items-center justify-center mb-4 text-[var(--text-muted)]">
+            <AlertCircle className="w-8 h-8" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">Task not found</h2>
+          <p className="text-[var(--text-secondary)] mb-6">The task you're looking for doesn't exist or you don't have access.</p>
+          <Button className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white" onClick={() => window.history.back()}>Go Back</Button>
         </div>
       </Layout>
     );
@@ -150,23 +160,23 @@ export default function TaskDetail() {
 
   return (
     <Layout>
-      <div className="max-w-5xl mx-auto flex flex-col gap-6 pb-10">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Link href="/projects" className="hover:text-foreground transition-colors">Projects</Link>
+      <div className="max-w-5xl mx-auto flex flex-col gap-6 pb-10 fade-in duration-300">
+        <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+          <Link href="/projects" className="hover:text-white transition-colors">Projects</Link>
           <span>/</span>
           {project ? (
-            <Link href={`/projects/${project.id}`} className="hover:text-foreground transition-colors">{project.name}</Link>
+            <Link href={`/projects/${project.id}`} className="hover:text-white transition-colors font-medium">{project.name}</Link>
           ) : (
-            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-4 w-20 bg-[var(--bg-hover)]" />
           )}
           <span>/</span>
-          <span className="font-medium text-foreground">T-{task.id}</span>
+          <span className="font-mono text-[10px] tracking-wider text-white bg-[var(--bg-secondary)] px-2 py-0.5 rounded border border-[var(--border-subtle)]">T-{task.id}</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Main Column */}
           <div className="lg:col-span-2 flex flex-col gap-8">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 relative group">
               {isEditingTitle ? (
                 <Input
                   ref={titleInputRef}
@@ -180,11 +190,11 @@ export default function TaskDetail() {
                       setEditTitle(task.title);
                     }
                   }}
-                  className="text-3xl font-bold h-auto py-2 px-3 border-primary"
+                  className="text-3xl md:text-4xl font-extrabold h-auto py-2 px-3 bg-[var(--bg-secondary)] border-[var(--accent)] text-white focus-visible:ring-[var(--accent)]"
                 />
               ) : (
                 <h1 
-                  className="text-3xl font-bold tracking-tight hover:bg-muted/50 p-2 -ml-2 rounded-md cursor-pointer transition-colors border border-transparent hover:border-border"
+                  className={`text-3xl md:text-4xl font-extrabold tracking-tight hover:bg-[var(--bg-hover)] p-2 -ml-2 rounded-lg cursor-pointer transition-colors border border-transparent hover:border-[var(--border)] text-white ${task.status === 'done' ? 'text-[var(--text-muted)] line-through decoration-[var(--border-subtle)]' : ''}`}
                   onClick={() => setIsEditingTitle(true)}
                   data-testid="task-title-display"
                 >
@@ -194,79 +204,109 @@ export default function TaskDetail() {
             </div>
 
             <div className="flex flex-col gap-3">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Description</h3>
+              <h3 className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider flex items-center gap-2">
+                <ActivityIcon className="w-4 h-4" /> Description
+              </h3>
               {isEditingDesc ? (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3 bg-[var(--bg-card)] border border-[var(--accent)] rounded-xl p-2 shadow-[0_0_0_2px_rgba(108,99,255,0.2)]">
                   <Textarea
                     ref={descInputRef}
                     value={editDesc}
                     onChange={(e) => setEditDesc(e.target.value)}
-                    className="min-h-[150px] resize-y"
+                    className="min-h-[200px] resize-y bg-transparent border-none focus-visible:ring-0 text-white text-base leading-relaxed"
+                    placeholder="Describe the task in detail..."
                   />
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={handleDescSubmit}>Save</Button>
-                    <Button size="sm" variant="ghost" onClick={() => {
+                  <div className="flex gap-2 justify-end px-2 pb-2">
+                    <Button variant="ghost" className="text-[var(--text-secondary)] hover:text-white" onClick={() => {
                       setIsEditingDesc(false);
                       setEditDesc(task.description || "");
                     }}>Cancel</Button>
+                    <Button className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white" onClick={handleDescSubmit}>Save</Button>
                   </div>
                 </div>
               ) : (
                 <div 
-                  className="prose dark:prose-invert max-w-none text-sm p-4 border rounded-xl bg-card hover:border-primary/50 cursor-pointer min-h-[100px] transition-colors"
+                  className="prose dark:prose-invert max-w-none text-base leading-relaxed p-5 border border-[var(--border)] rounded-xl bg-[var(--bg-card)] hover:border-[var(--border-subtle)] hover:bg-[var(--bg-hover)] cursor-pointer min-h-[120px] transition-all text-[var(--text-primary)]"
                   onClick={() => setIsEditingDesc(true)}
                 >
                   {task.description ? (
                     <p className="whitespace-pre-wrap">{task.description}</p>
                   ) : (
-                    <span className="text-muted-foreground italic">Add a description...</span>
+                    <span className="text-[var(--text-muted)] italic flex items-center h-full justify-center">Click to add a description...</span>
                   )}
                 </div>
               )}
             </div>
             
-            <div className="border-t pt-6 mt-4">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">Activity</h3>
-              <div className="text-center py-8 border border-dashed rounded-lg bg-muted/20">
-                <p className="text-sm text-muted-foreground">Activity feed coming soon</p>
+            <div className="border-t border-[var(--border)] pt-8 mt-4">
+              <h3 className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-6 flex items-center gap-2">
+                <Clock className="w-4 h-4" /> Activity Feed
+              </h3>
+              <div className="flex flex-col items-center justify-center py-12 border border-[var(--border)] border-dashed rounded-xl bg-[var(--bg-card)]/50">
+                <div className="w-10 h-10 rounded-full bg-[var(--bg-secondary)] flex items-center justify-center mb-3">
+                  <ActivityIcon className="w-5 h-5 text-[var(--text-muted)]" />
+                </div>
+                <p className="text-sm font-medium text-white">Activity feed coming soon</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-1">Comments and history will appear here.</p>
               </div>
             </div>
           </div>
 
           {/* Sidebar */}
-          <div className="flex flex-col gap-6 lg:pl-6 lg:border-l">
-            <div className="flex flex-col gap-4 p-5 bg-card border rounded-xl shadow-sm">
-              <div className="flex flex-col gap-1.5">
-                <span className="text-xs font-medium text-muted-foreground">Status</span>
+          <div className="flex flex-col gap-6 lg:pl-8 lg:border-l border-[var(--border)] sticky top-20">
+            <div className="flex flex-col gap-5 p-6 bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl shadow-lg">
+              <div className="flex items-center gap-2 mb-2 pb-4 border-b border-[var(--border)]">
+                <Settings className="w-4 h-4 text-[var(--text-muted)]" />
+                <h3 className="font-semibold text-white">Properties</h3>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Status</span>
                 <Select 
                   value={task.status} 
                   onValueChange={(val: any) => handleUpdate({ status: val })}
                 >
-                  <SelectTrigger className="h-9 w-full bg-background" data-testid="select-update-status">
+                  <SelectTrigger className="h-10 w-full bg-[var(--bg-secondary)] border-[var(--border)] text-white focus:ring-[var(--accent)]" data-testid="select-update-status">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="todo">To Do</SelectItem>
-                    <SelectItem value="in_progress">In Progress</SelectItem>
-                    <SelectItem value="done">Done</SelectItem>
-                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                  <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
+                    <SelectItem value="todo">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[var(--text-muted)]" /> To Do
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="in_progress">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-blue-500" /> In Progress
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="done">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[var(--success)]" /> Done
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="cancelled">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full border border-[var(--text-muted)]" /> Cancelled
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <span className="text-xs font-medium text-muted-foreground">Priority</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Priority</span>
                 <Select 
                   value={task.priority} 
                   onValueChange={(val: any) => handleUpdate({ priority: val })}
                 >
-                  <SelectTrigger className="h-9 w-full bg-background">
+                  <SelectTrigger className="h-10 w-full bg-[var(--bg-secondary)] border-[var(--border)] text-white focus:ring-[var(--accent)]">
                     <div className="flex items-center gap-2">
                       {PRIORITY_ICONS[task.priority as keyof typeof PRIORITY_ICONS]}
                       <span className="capitalize">{task.priority}</span>
                     </div>
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
                     <SelectItem value="low">
                       <div className="flex items-center gap-2">
                         {PRIORITY_ICONS.low} Low
@@ -291,56 +331,66 @@ export default function TaskDetail() {
                 </Select>
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <span className="text-xs font-medium text-muted-foreground">Assignee</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Assignee</span>
                 <Select 
                   value={task.assigneeId?.toString() || "unassigned"} 
                   onValueChange={(val) => handleUpdate({ assigneeId: val === "unassigned" ? null : parseInt(val) })}
                 >
-                  <SelectTrigger className="h-9 w-full bg-background">
+                  <SelectTrigger className="h-10 w-full bg-[var(--bg-secondary)] border-[var(--border)] text-white focus:ring-[var(--accent)]">
                     {task.assignee ? (
                       <div className="flex items-center gap-2 truncate">
-                        <Avatar className="h-5 w-5">
+                        <Avatar className="h-6 w-6 border border-[var(--border)]">
                           <AvatarImage src={task.assignee.avatarUrl || undefined} />
-                          <AvatarFallback className="text-[10px]">{task.assignee.name.charAt(0)}</AvatarFallback>
+                          <AvatarFallback className="text-[10px] bg-[var(--bg-card)]">{task.assignee.name.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <span className="text-sm truncate">{task.assignee.name}</span>
+                        <span className="text-sm truncate font-medium">{task.assignee.name}</span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <User className="h-4 w-4" />
+                      <div className="flex items-center gap-2 text-[var(--text-secondary)]">
+                        <div className="w-6 h-6 rounded-full border border-dashed border-[var(--border-subtle)] flex items-center justify-center bg-[var(--bg-card)]">
+                          <User className="h-3 w-3" />
+                        </div>
                         <span className="text-sm">Unassigned</span>
                       </div>
                     )}
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-[var(--bg-card)] border-[var(--border)] text-white">
                     <SelectItem value="unassigned">Unassigned</SelectItem>
                     {members?.map(m => (
                       <SelectItem key={m.id} value={m.userId.toString()}>
-                        <div className="flex items-center gap-2">
-                          <Avatar className="h-5 w-5">
+                        <div className="flex items-center gap-2 py-1">
+                          <Avatar className="h-6 w-6 border border-[var(--border)]">
                             <AvatarImage src={m.user.avatarUrl || undefined} />
-                            <AvatarFallback className="text-[10px]">{m.user.name.charAt(0)}</AvatarFallback>
+                            <AvatarFallback className="text-[10px] bg-[var(--bg-secondary)]">{m.user.name.charAt(0)}</AvatarFallback>
                           </Avatar>
-                          {m.user.name}
+                          <span className="font-medium">{m.user.name}</span>
                         </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
+              
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Due Date</span>
+                <Button variant="outline" className="w-full justify-start text-left font-normal bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-white h-10">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  {task.dueDate ? format(new Date(task.dueDate), "PPP") : <span>Set date</span>}
+                </Button>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-3 text-sm text-muted-foreground p-4 bg-muted/30 rounded-xl border border-dashed">
-              <div className="flex justify-between">
-                <span>Created</span>
-                <span className="font-medium text-foreground">{format(new Date(task.createdAt), "MMM d, yyyy")}</span>
+            <div className="flex flex-col gap-3 text-sm text-[var(--text-secondary)] p-5 bg-[var(--bg-card)] rounded-2xl border border-[var(--border)] shadow-sm">
+              <div className="flex justify-between items-center border-b border-[var(--border)] pb-3">
+                <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-[var(--text-muted)]" /> Created</span>
+                <span className="font-medium text-white">{format(new Date(task.createdAt), "MMM d, yyyy")}</span>
               </div>
-              <div className="flex justify-between items-center">
-                <span>Reporter</span>
-                <div className="flex items-center gap-2 font-medium text-foreground">
+              <div className="flex justify-between items-center pt-1">
+                <span className="flex items-center gap-2"><User className="w-4 h-4 text-[var(--text-muted)]" /> Reporter</span>
+                <div className="flex items-center gap-2 font-medium text-white bg-[var(--bg-secondary)] px-2 py-1 rounded-md border border-[var(--border-subtle)]">
                   <Avatar className="h-5 w-5">
-                    <AvatarFallback className="text-[10px] text-muted-foreground">
+                    <AvatarFallback className="text-[10px] bg-[var(--bg-card)]">
                       {(task as any).createdBy?.name?.charAt(0) || "?"}
                     </AvatarFallback>
                   </Avatar>

@@ -1,18 +1,28 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, FolderKanban, Settings, LogOut, Plus } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Settings, LogOut, ChevronLeft, Menu, Search } from "lucide-react";
 import { useClerk, useUser } from "@clerk/react";
 import { useGetMe } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const { signOut } = useClerk();
   const { user } = useUser();
   const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  // Upsert user into database
   useGetMe({
     query: {
       enabled: !!user?.id,
@@ -30,78 +40,173 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen flex bg-background w-full">
+    <div className="min-h-screen flex bg-[var(--bg-primary)] text-[var(--text-primary)] w-full">
       {/* Sidebar */}
-      <aside className="w-64 border-r bg-sidebar flex flex-col hidden md:flex h-screen sticky top-0">
-        <div className="h-16 flex items-center px-6 border-b">
-          <div className="flex items-center gap-2">
-            <img src={`${basePath}/logo.svg`} alt="Logo" className="w-6 h-6" />
-            <span className="font-bold text-lg tracking-tight">ShipHub</span>
+      <aside 
+        className={`fixed md:sticky top-0 z-50 h-screen border-r border-[var(--border)] bg-[var(--bg-secondary)] flex flex-col transition-all duration-300 ease-in-out ${
+          collapsed ? "w-16" : "w-60"
+        } ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
+      >
+        <div className="h-14 flex items-center justify-between px-4 border-b border-[var(--border)]">
+          <div className={`flex items-center gap-2 overflow-hidden ${collapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"}`}>
+            <img src={`${basePath}/logo.svg`} alt="Logo" className="w-6 h-6 shrink-0" />
+            <span className="font-bold tracking-tight text-white">TeamFlow</span>
           </div>
+          {collapsed && (
+            <div className="w-full flex justify-center">
+              <img src={`${basePath}/logo.svg`} alt="Logo" className="w-6 h-6 shrink-0" />
+            </div>
+          )}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={`shrink-0 h-8 w-8 text-[var(--text-secondary)] hover:text-white hidden md:flex ${collapsed ? "hidden" : ""}`}
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
         </div>
         
-        <div className="flex-1 py-6 px-4 flex flex-col gap-1 overflow-y-auto">
-          <div className="text-xs font-semibold text-sidebar-foreground/50 uppercase tracking-wider mb-2 px-2">
-            Overview
-          </div>
+        <div className="flex-1 py-4 flex flex-col gap-1 overflow-y-auto px-2">
+          {!collapsed && (
+            <div className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-2 px-2">
+              Menu
+            </div>
+          )}
           {navItems.map((item) => {
             const isActive = location.startsWith(item.href);
+            const content = (
+              <div
+                className={`flex items-center rounded-lg transition-colors cursor-pointer text-sm font-medium h-9 ${
+                  collapsed ? "justify-center w-9 mx-auto" : "px-3 gap-3 w-full"
+                } ${
+                  isActive
+                    ? "bg-[var(--accent-glow)] border-l-2 border-[var(--accent)] text-white"
+                    : "text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-white border-l-2 border-transparent"
+                }`}
+              >
+                <item.icon className="w-4 h-4 shrink-0" />
+                {!collapsed && <span>{item.label}</span>}
+              </div>
+            );
+
             return (
               <Link key={item.href} href={item.href}>
-                <div
-                  data-testid={`nav-${item.label.toLowerCase()}`}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors cursor-pointer text-sm font-medium ${
-                    isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent/50"
-                  }`}
-                >
-                  <item.icon className="w-4 h-4" />
-                  {item.label}
-                </div>
+                {collapsed ? (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div>{content}</div>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">{item.label}</TooltipContent>
+                  </Tooltip>
+                ) : content}
               </Link>
             );
           })}
         </div>
 
-        <div className="p-4 border-t">
-          <div className="flex items-center gap-3 mb-4 px-2">
-            <Avatar className="h-9 w-9 border">
-              <AvatarImage src={user?.imageUrl} />
-              <AvatarFallback>{user?.firstName?.charAt(0) || "U"}</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col flex-1 min-w-0">
-              <span className="text-sm font-medium truncate">{user?.fullName}</span>
-              <span className="text-xs text-muted-foreground truncate">{user?.primaryEmailAddress?.emailAddress}</span>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <Link href="/settings">
-              <Button variant="ghost" className="w-full justify-start text-muted-foreground" size="sm" data-testid="nav-settings">
-                <Settings className="w-4 h-4 mr-2" />
+        <div className="p-2 border-t border-[var(--border)]">
+          <Link href="/settings">
+            {collapsed ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" className="w-full justify-center h-9 text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-white" size="icon">
+                    <Settings className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">Settings</TooltipContent>
+              </Tooltip>
+            ) : (
+              <Button variant="ghost" className="w-full justify-start h-9 text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-white mb-1" size="sm">
+                <Settings className="w-4 h-4 mr-2 shrink-0" />
                 Settings
               </Button>
-            </Link>
-            <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-destructive" size="sm" onClick={handleSignOut} data-testid="button-signout">
-              <LogOut className="w-4 h-4 mr-2" />
+            )}
+          </Link>
+          {collapsed ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" className="w-full justify-center h-9 text-[var(--text-secondary)] hover:bg-[var(--danger)] hover:text-white" size="icon" onClick={handleSignOut}>
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">Sign Out</TooltipContent>
+            </Tooltip>
+          ) : (
+            <Button variant="ghost" className="w-full justify-start h-9 text-[var(--text-secondary)] hover:bg-[var(--danger)] hover:text-white" size="sm" onClick={handleSignOut}>
+              <LogOut className="w-4 h-4 mr-2 shrink-0" />
               Sign Out
             </Button>
-          </div>
+          )}
         </div>
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0">
-        <div className="h-16 border-b flex items-center px-6 md:hidden sticky top-0 bg-background z-10">
-          <div className="flex items-center gap-2">
-            <img src={`${basePath}/logo.svg`} alt="Logo" className="w-6 h-6" />
-            <span className="font-bold text-lg tracking-tight">ShipHub</span>
+        {/* Top Header */}
+        <header className="h-14 border-b border-[var(--border)] bg-[var(--bg-secondary)] sticky top-0 z-40 flex items-center justify-between px-4 lg:px-6">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" className="md:hidden text-[var(--text-secondary)]" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              <Menu className="w-5 h-5" />
+            </Button>
+            <div className="hidden sm:flex relative group">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] group-focus-within:text-[var(--accent)] transition-colors" />
+              <Input 
+                placeholder="Search..." 
+                className="w-64 bg-[var(--bg-card)] border-[var(--border)] pl-9 h-9 text-sm focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full">
+          
+          <div className="flex items-center gap-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="outline-none">
+                <Avatar className="h-8 w-8 border border-[var(--border)] cursor-pointer hover:ring-2 ring-[var(--accent)] transition-all">
+                  <AvatarImage src={user?.imageUrl} />
+                  <AvatarFallback className="bg-[var(--bg-card)] text-xs text-[var(--text-secondary)]">
+                    {user?.firstName?.charAt(0) || "U"}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-[var(--bg-card)] border-[var(--border)] text-white">
+                <div className="flex items-center gap-2 p-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={user?.imageUrl} />
+                    <AvatarFallback>{user?.firstName?.charAt(0) || "U"}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col min-w-0">
+                    <p className="text-sm font-medium leading-none truncate">{user?.fullName}</p>
+                    <p className="text-xs text-[var(--text-secondary)] truncate mt-1">{user?.primaryEmailAddress?.emailAddress}</p>
+                  </div>
+                </div>
+                <DropdownMenuSeparator className="bg-[var(--border)]" />
+                <DropdownMenuItem className="cursor-pointer hover:bg-[var(--bg-hover)]">
+                  <Link href="/settings" className="flex items-center w-full">
+                    <Settings className="w-4 h-4 mr-2 text-[var(--text-secondary)]" />
+                    Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer hover:bg-[var(--danger)] hover:text-white text-[var(--danger)]" onClick={handleSignOut}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </header>
+
+        <div className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
           {children}
         </div>
       </main>
+      
+      {/* Mobile overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
     </div>
   );
 }

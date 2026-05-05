@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ClerkProvider, Show, useClerk } from "@clerk/react";
 import { publishableKeyFromHost } from "@clerk/react/internal";
-import { shadcn } from "@clerk/themes";
+import { dark } from "@clerk/themes";
 
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
@@ -39,41 +39,23 @@ if (!clerkPubKey) {
 }
 
 const clerkAppearance = {
-  theme: shadcn,
+  baseTheme: dark,
   cssLayerName: "clerk",
-  options: {
-    logoPlacement: "inside" as const,
-    logoLinkUrl: basePath || "/",
-    logoImageUrl: `${window.location.origin}${basePath}/logo.svg`,
-  },
   variables: {
-    colorPrimary: "hsl(221.2 83.2% 53.3%)",
-    colorForeground: "hsl(222.2 84% 4.9%)",
-    colorMutedForeground: "hsl(215.4 16.3% 46.9%)",
-    colorBackground: "hsl(0 0% 100%)",
-    colorInput: "hsl(214.3 31.8% 91.4%)",
-    colorInputForeground: "hsl(222.2 84% 4.9%)",
-    colorDanger: "hsl(0 84.2% 60.2%)",
-    colorNeutral: "hsl(214.3 31.8% 91.4%)",
+    colorPrimary: "#6c63ff",
+    colorBackground: "#16161f",
+    colorInputBackground: "#111118",
+    colorInputText: "#f0f0ff",
+    colorText: "#f0f0ff",
+    colorTextSecondary: "#8b8ba7",
+    colorDanger: "#ef4444",
     fontFamily: "'Inter', sans-serif",
-    borderRadius: "0.5rem",
+    borderRadius: "8px",
   },
   elements: {
-    rootBox: "w-full flex justify-center",
-    cardBox: "bg-white rounded-2xl w-[440px] max-w-full overflow-hidden border border-border shadow-sm",
-    card: "!shadow-none !border-0 !bg-transparent !rounded-none",
-    footer: "!shadow-none !border-0 !bg-transparent !rounded-none",
-    headerTitle: "text-foreground font-bold",
-    headerSubtitle: "text-muted-foreground",
-    socialButtonsBlockButtonText: "text-foreground font-medium",
-    formFieldLabel: "text-foreground font-medium",
-    footerActionLink: "text-primary hover:text-primary/90 font-medium",
-    footerActionText: "text-muted-foreground",
-    dividerText: "text-muted-foreground",
-    identityPreviewEditButton: "text-primary hover:text-primary/90",
-    formFieldSuccessText: "text-chart-2",
-    alertText: "text-destructive",
-  },
+    card: "shadow-2xl border border-[#2a2a3a]",
+    formButtonPrimary: "bg-[#6c63ff] hover:bg-[#7c74ff]",
+  }
 };
 
 function ClerkQueryClientCacheInvalidator() {
