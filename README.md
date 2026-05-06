@@ -1,277 +1,197 @@
-# Team Flow
+# TeamFlow - Team Task Manager
 
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.19.0-brightgreen)](https://nodejs.org/)
-[![React](https://img.shields.io/badge/React-19.1.4-blue)](https://reactjs.org/)
-[![Express](https://img.shields.io/badge/Express-5.1.0-black)](https://expressjs.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-blue)](https://www.postgresql.org/)
-[![Clerk](https://img.shields.io/badge/Clerk-Authentication-orange)](https://clerk.com/)
-[![Vite](https://img.shields.io/badge/Vite-7.3.2-646CFF)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+> A full-stack project and task management platform with Clerk authentication, project-scoped role controls, responsive workspace views, and a polished UI built for modern teams.
 
-A modern, full-stack task management application built with cutting-edge technologies. Team Flow enables teams to collaborate efficiently on projects, manage tasks, and track progress with real-time updates and secure authentication.
+![Dashboard Preview](public/screenshots/dashboard.png)
 
-## 🚀 Features
+## Live Demo
+**[View Live App ->](https://your-railway-app.up.railway.app)**
 
-### Core Functionality
-- **Project Management**: Create, organize, and manage multiple projects
-- **Task Tracking**: Comprehensive task lifecycle management with status updates
-- **Team Collaboration**: Invite members, assign tasks, and share responsibilities
-- **Real-time Updates**: Live synchronization across all connected clients
-- **Advanced Filtering**: Filter tasks by status, assignee, priority, and due dates
-
-### User Experience
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Intuitive UI**: Clean, modern interface built with Radix UI components
-- **Dark/Light Mode**: Theme switching for comfortable viewing
-- **Accessibility**: WCAG-compliant components and keyboard navigation
-
-### Security & Performance
-- **Secure Authentication**: Clerk-powered authentication with social logins
-- **Role-based Access**: Granular permissions for projects and tasks
-- **Optimized Performance**: Fast loading with Vite bundling and code splitting
-- **Database Optimization**: Efficient queries with Drizzle ORM
-
-## 🛠 Tech Stack
-
-### Frontend
-- **React 19.1.4** - Modern React with concurrent features
-- **Vite 7.3.2** - Lightning-fast build tool and dev server
-- **Tailwind CSS 4.1.14** - Utility-first CSS framework
-- **Radix UI** - Accessible, unstyled UI components
-- **React Query** - Powerful data fetching and caching
-- **Wouter** - Lightweight routing library
-
-### Backend
-- **Node.js 20+** - Runtime environment
-- **Express 5.1.0** - Fast, minimalist web framework
-- **PostgreSQL** - Robust relational database
-- **Drizzle ORM** - Type-safe SQL query builder
-- **Clerk** - Authentication and user management
-
-### Development & Deployment
-- **ESLint** - Code linting and formatting
-- **Vitest** - Unit testing framework
-- **Railway** - Full-stack deployment platform
-- **Vercel** - Frontend deployment and CDN
-
-## 📋 Prerequisites
-
-Before running this application, ensure you have the following installed:
-
-- **Node.js** >= 20.19.0 (required for Vite 7.3.2)
-- **npm** >= 10.0.0 or **yarn** >= 1.22.0
-- **PostgreSQL** >= 15.0
-- **Git** for version control
-
-## 🔧 Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/prateekdz/TeamFlow.git
-   cd TeamFlow
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Environment Configuration**
-   ```bash
-   cp .env.example .env
-   ```
-
-   Configure the following environment variables in `.env`:
-   ```env
-   # Database
-   DATABASE_URL=postgresql://username:password@localhost:5432/teamflow
-
-   # Clerk Authentication
-   CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key
-   CLERK_SECRET_KEY=sk_test_your_secret_key
-   VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key
-
-   # Server Configuration
-   NODE_ENV=development
-   PORT=3000
-   CLIENT_PORT=5173
-   BASE_PATH=/
-   LOG_LEVEL=info
-
-   # Production API Base URL (for deployed frontend)
-   VITE_API_BASE_URL=http://localhost:3000
-   ```
-
-4. **Database Setup**
-   ```bash
-   # Push database schema
-   npm run db:push
-
-   # Optional: Generate types
-   npm run db:generate
-   ```
-
-## 🚀 Running the Application
-
-### Development Mode
-```bash
-# Start both frontend and backend in development
-npm run dev
-```
-
-The application will be available at:
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:3000
-
-### Production Build
-```bash
-# Build the frontend
-npm run build
-
-# Start the production server
-npm start
-```
-
-### Additional Scripts
-```bash
-# Run linting
-npm run lint
-
-# Start backend server only
-npm run server
-
-# Preview production build
-npm run preview
-```
-
-## 📡 API Documentation
-
-### Authentication Endpoints
-- `GET /api/healthz` - Health check
-- `POST /api/auth/*` - Clerk authentication routes
-
-### Project Endpoints
-- `GET /api/projects` - List user projects
-- `POST /api/projects` - Create new project
-- `GET /api/projects/:id` - Get project details
-- `PUT /api/projects/:id` - Update project
-- `DELETE /api/projects/:id` - Delete project
-
-### Task Endpoints
-- `GET /api/tasks` - List tasks with filtering
-- `POST /api/tasks` - Create new task
-- `GET /api/tasks/:id` - Get task details
-- `PUT /api/tasks/:id` - Update task
-- `DELETE /api/tasks/:id` - Delete task
-
-### Member Management
-- `GET /api/projects/:id/members` - List project members
-- `POST /api/projects/:id/members` - Add project member
-- `DELETE /api/projects/:id/members/:userId` - Remove member
-
-## 🚀 Deployment
-
-### Railway (Full-Stack)
-1. Connect your GitHub repository to Railway
-2. Configure Railway service commands:
-   - **Build Command**: `npm run build`
-   - **Start Command**: `npm start`
-3. Set environment variables in Railway dashboard
-4. Railway will automatically detect and deploy the application
-5. Run database migrations in Railway terminal:
-   ```bash
-   npx drizzle-kit push --config drizzle.config.js
-   ```
-
-Important:
-- Set `PORT` to Railway's injected port only if you are overriding it manually. In most cases Railway provides it automatically.
-- If `NODE_ENV` is not set by Railway, the server now treats Railway runtime variables as production so it serves `dist/public` instead of redirecting to the Vite dev server.
-
-### Vercel (Frontend Only)
-1. Connect GitHub repository to Vercel
-2. Configure build settings:
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist/public`
-3. Set environment variables for Clerk and API base URL
-
-### Environment Variables for Production
-```env
-# Railway/Vercel Environment Variables
-DATABASE_URL=your_production_db_url
-CLERK_PUBLISHABLE_KEY=pk_live_your_key
-CLERK_SECRET_KEY=sk_live_your_key
-VITE_CLERK_PUBLISHABLE_KEY=pk_live_your_key
-VITE_API_BASE_URL=https://your-railway-app.up.railway.app
-PORT=3000
-NODE_ENV=production
-```
-
-## 🧪 Testing
-
-```bash
-# Run unit tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-### Development Guidelines
-- Follow the existing code style and conventions
-- Write clear, concise commit messages
-- Add tests for new features
-- Update documentation as needed
-- Ensure all tests pass before submitting PR
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Clerk](https://clerk.com/) for authentication
-- [Radix UI](https://www.radix-ui.com/) for accessible components
-- [Tailwind CSS](https://tailwindcss.com/) for styling
-- [Drizzle ORM](https://orm.drizzle.team/) for database management
-
-## 📞 Support
-
-If you have any questions or need help:
-
-- Open an issue on GitHub
-- Check the documentation
-- Contact the maintainers
+| Access | Details |
+|------|-------|
+| Authentication | Clerk-managed sign in and sign up |
+| Roles | Project members can be `member` or `admin` |
+| Demo access | Create an account from the signup page or use your configured Clerk test users |
 
 ---
 
-**Built with ❤️ by the Prateek**
+## Screenshots
+
+### Authentication
+| Login | Signup |
+|-------|--------|
+| ![Login](public/screenshots/auth-login.png) | ![Signup](public/screenshots/auth-signup.png) |
+
+### Dashboard
+![Dashboard](public/screenshots/dashboard.png)
+
+### Project Management
+![Projects](public/screenshots/projects.png)
+
+### Team Management
+![Team](public/screenshots/team.png)
+
+### Mobile View
+![Mobile](public/screenshots/mobile-dashboard.png)
+
+---
+
+## Features
+
+- **Authentication** - Clerk-powered sign up, sign in, protected routes, and session-aware client state.
+- **Role-Based Access** - Project-level `admin` and `member` roles with guarded team and task workflows.
+- **Project Management** - Create workspaces, track progress, view status, and monitor project health from grid or list layouts.
+- **Task Tracking** - Manage tasks in kanban and list views with inline creation, status filters, priority signals, and task detail pages.
+- **Dashboard** - Review personal workload, recent activity, project momentum, and overdue work from a single overview screen.
+- **Responsive UI** - Mobile-friendly layouts, adaptive navigation, and dedicated compact dashboard rendering.
+- **Notifications** - Toast feedback for project, task, and team actions.
+- **Team Management** - Invite teammates, update roles, remove members, and review participation stats per project.
+
+---
+
+## Tech Stack
+
+**Frontend**
+- React 19
+- Vite
+- Wouter
+- TanStack Query
+- Tailwind CSS v4
+- Radix UI
+- Lucide React
+- Inter font
+
+**Backend**
+- Node.js
+- Express 5
+- REST API with zod-backed schemas and validation
+- Clerk session sync for protected data access
+
+**Database**
+- PostgreSQL
+- Drizzle ORM
+
+**Deployment**
+- Railway-ready Node deployment
+- Static frontend build served from `dist/public`
+
+---
+
+## Local Setup
 
 ```bash
+# Clone the repository
+git clone https://github.com/prateekdz/TeamFlow.git
+cd TeamFlow
+
+# Install dependencies
+npm install
+
+# Create your environment file
+cp .env.example .env
+# Fill in DATABASE_URL, CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY,
+# VITE_CLERK_PUBLISHABLE_KEY, PORT, and CLIENT_PORT
+
+# Push the database schema
+npm run db:push
+
+# Start the API server
+npm start
+
+# In a second terminal, start the frontend
 npm run dev
 ```
 
-The API runs on `PORT` and Vite runs on `CLIENT_PORT`.
+Default local URLs:
 
-## Scripts
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:3000`
 
-- `npm run dev` starts the API and frontend together.
-- `npm run start` starts the API server.
-- `npm run build` builds the frontend into `dist/public`.
-- `npm run test` runs the Node test suite.
-- `npm run lint` runs ESLint.
-- `npm run db:push` pushes the Drizzle schema to PostgreSQL.
+---
 
-Made by Prateek Dwivedi
+## Project Structure
+
+```text
+teamflow/
+├── public/                 # Static assets, generated client artifacts, and README screenshots
+│   └── screenshots/
+├── scripts/                # Utility scripts such as screenshot capture
+├── src/
+│   ├── components/         # Shared UI building blocks and layout primitives
+│   ├── config/             # Runtime configuration and logger setup
+│   ├── controllers/        # Express route handlers
+│   ├── hooks/              # Reusable React hooks
+│   ├── middleware/         # Auth and proxy middleware
+│   ├── models/             # API schemas and database schema definitions
+│   ├── pages/              # Route-level React pages
+│   ├── routes/             # Express API routes
+│   └── services/           # Data and business-logic layer
+├── drizzle/                # Drizzle SQL artifacts
+├── index.html
+├── package.json
+└── README.md
+```
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Access | Description |
+|--------|----------|--------|-------------|
+| GET | `/api/healthz` | Public | Health check |
+| GET | `/api/dashboard/summary` | Authenticated | Dashboard KPI summary |
+| GET | `/api/dashboard/my-tasks` | Authenticated | Current user's assigned tasks |
+| GET | `/api/dashboard/activity` | Authenticated | Recent task activity feed |
+| GET | `/api/projects` | Authenticated | List all projects for the current user |
+| POST | `/api/projects` | Authenticated | Create a new project |
+| GET | `/api/projects/:projectId` | Authenticated | Fetch a single project |
+| PATCH | `/api/projects/:projectId` | Authenticated | Update project metadata |
+| GET | `/api/projects/:projectId/tasks` | Authenticated | List tasks for a project |
+| POST | `/api/projects/:projectId/tasks` | Authenticated | Create a task in a project |
+| PATCH | `/api/projects/:projectId/tasks/:taskId` | Authenticated | Update task status or fields |
+| GET | `/api/projects/:projectId/members` | Authenticated | List project members |
+| POST | `/api/projects/:projectId/members` | Authenticated | Invite a member to a project |
+| PATCH | `/api/projects/:projectId/members/:userId` | Authenticated | Change a member role |
+
+---
+
+## Deployment
+
+1. Push the repository to GitHub.
+2. Create a Railway project and connect the repository.
+3. Add the required environment variables:
+   `DATABASE_URL`, `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `VITE_CLERK_PUBLISHABLE_KEY`, `PORT`, and optional `VITE_API_BASE_URL`.
+4. Use `npm run build` as the build command and `npm start` as the start command.
+5. Run `npm run db:push` against the production database before first use.
+
+**Live URL:** `https://your-railway-app.up.railway.app`
+
+---
+
+## Screenshot Automation
+
+The repo includes `scripts/capture-screenshots.js` to generate the README assets automatically.
+
+```bash
+# Optional: provide an existing Clerk account for protected pages
+$env:TEAMFLOW_EMAIL="your-email@example.com"
+$env:TEAMFLOW_PASSWORD="your-password"
+
+# Optional: override the frontend URL
+$env:SCREENSHOT_BASE_URL="http://127.0.0.1:5173"
+
+node scripts/capture-screenshots.js
+```
+
+If authenticated pages cannot be captured automatically, the script generates polished placeholder PNGs with the correct filenames so the README stays presentation-ready.
+
+---
+
+## Author
+
+**Prateek Dwivedi**  
+[GitHub](https://github.com/prateekdz)
+
+---
+
+Built for internship selection and portfolio review, with an emphasis on production-style UI, full-stack architecture, and team collaboration workflows.
