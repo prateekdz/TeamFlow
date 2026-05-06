@@ -10,6 +10,7 @@ out-tsc
 
 # dependencies
 node_modules
+.pnpm-store
 
 # IDEs and editors
 /.idea
@@ -41,9 +42,14 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Environment variables
+.env
+
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 
 # Replit
 .cache/
 .local/
+
+/src/generated/prisma
