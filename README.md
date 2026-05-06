@@ -173,12 +173,19 @@ npm run preview
 
 ### Railway (Full-Stack)
 1. Connect your GitHub repository to Railway
-2. Set environment variables in Railway dashboard
-3. Railway will automatically detect and deploy the application
-4. Run database migrations in Railway terminal:
+2. Configure Railway service commands:
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+3. Set environment variables in Railway dashboard
+4. Railway will automatically detect and deploy the application
+5. Run database migrations in Railway terminal:
    ```bash
    npx drizzle-kit push --config drizzle.config.js
    ```
+
+Important:
+- Set `PORT` to Railway's injected port only if you are overriding it manually. In most cases Railway provides it automatically.
+- If `NODE_ENV` is not set by Railway, the server now treats Railway runtime variables as production so it serves `dist/public` instead of redirecting to the Vite dev server.
 
 ### Vercel (Frontend Only)
 1. Connect GitHub repository to Vercel

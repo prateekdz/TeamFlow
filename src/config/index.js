@@ -47,6 +47,26 @@ function isConfiguredSecret(value) {
 }
 
 /**
+ * Infer the runtime environment when a platform does not set NODE_ENV.
+ *
+ * Railway exposes platform-specific variables in production, so we treat
+ * those deployments as production by default.
+ *
+ * @returns {string}
+ */
+function resolveRuntimeEnv() {
+  if (process.env.NODE_ENV) {
+    return process.env.NODE_ENV;
+  }
+
+  if (process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PUBLIC_DOMAIN) {
+    return "production";
+  }
+
+  return "development";
+}
+
+/**
  * Build the runtime configuration object for the application.
  *
  * @returns {{
@@ -65,7 +85,7 @@ function isConfiguredSecret(value) {
  * }}
  */
 export function createConfig() {
-  const env = process.env.NODE_ENV ?? "development";
+  const env = resolveRuntimeEnv();
   const publicDir = path.resolve(process.cwd(), "dist", "public");
 
   return {
