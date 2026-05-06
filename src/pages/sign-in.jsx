@@ -1,5 +1,5 @@
 import { SignIn } from "@clerk/react";
-import { ArrowRight, Chrome, Github, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
 
 function getClerkAppearance() {
   return {
@@ -19,10 +19,10 @@ function getClerkAppearance() {
       rootBox: "w-full",
       cardBox: "w-full",
       card:
-        "w-full max-w-none rounded-[20px] border border-[var(--border)] bg-[var(--bg-card)] p-0 shadow-[0_8px_24px_rgba(0,0,0,0.3)]",
+        "w-full max-w-none rounded-[24px] border border-[var(--border)] bg-[var(--bg-card)] p-0 shadow-[0_24px_80px_rgba(4,8,20,0.28)]",
       header: "hidden",
       footer: "hidden",
-      form: "gap-4 px-10 pb-10",
+      form: "gap-4 px-6 pb-6 sm:px-8 sm:pb-8",
       formFieldLabel: "mb-2 text-sm font-medium text-[var(--text-primary)]",
       formFieldInput:
         "h-11 rounded-lg border border-[var(--border)] bg-[var(--bg-secondary)] px-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_var(--accent-glow)]",
@@ -69,7 +69,7 @@ function AuthShell({ title, subtitle, children }) {
           <div className="max-w-xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-white/72">
               <Sparkles className="h-3.5 w-3.5" />
-              MAANG-level workspace polish
+              Calm, fast, production-ready
             </div>
             <h1 className="max-w-lg text-5xl font-semibold leading-[1.05] tracking-[-0.04em] text-white">
               {title}
@@ -78,9 +78,9 @@ function AuthShell({ title, subtitle, children }) {
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {[
-                ["Faster focus", "Context-rich tasks and projects in one command center."],
-                ["Cleaner collaboration", "Timelines, ownership, and progress without clutter."],
-                ["Confident delivery", "Ship with the clarity of Google, Linear, and Notion."],
+                ["Faster focus", "Keep task context, owners, and blockers visible in one place."],
+                ["Cleaner collaboration", "Stay aligned without digging through scattered updates."],
+                ["Confident delivery", "Move from plan to shipped work with less friction."],
               ].map(([heading, body]) => (
                 <div key={heading} className="rounded-2xl border border-white/10 bg-white/6 p-4 backdrop-blur-sm">
                   <div className="text-sm font-semibold text-white">{heading}</div>
@@ -103,7 +103,7 @@ function AuthShell({ title, subtitle, children }) {
           <div className="absolute right-[10%] top-32 h-32 w-32 rounded-full bg-[rgba(59,130,246,0.18)] blur-3xl" />
         </div>
 
-        <div className="relative z-10 w-full max-w-[420px]">
+        <div className="relative z-10 w-full max-w-[460px]">
           <div className="mb-8 flex items-center justify-center gap-3 lg:hidden">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--info)] shadow-[0_12px_30px_rgba(108,99,255,0.24)]">
               <img src={`${basePath}/logo.svg`} alt="TeamFlow" className="h-5 w-5 brightness-200" />
@@ -114,32 +114,28 @@ function AuthShell({ title, subtitle, children }) {
             </div>
           </div>
 
-          <div className="surface-card rounded-[24px] p-0">
-            <div className="border-b border-[var(--border)] px-10 pb-6 pt-10">
+          <div className="surface-card overflow-hidden rounded-[28px] border-[var(--border)] p-0">
+            <div className="border-b border-[var(--border)] px-6 pb-5 pt-6 sm:px-8 sm:pb-6 sm:pt-8">
               <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
                 Secure authentication
               </div>
-              <h2 className="mt-4 text-3xl font-semibold text-[var(--text-primary)]">{title}</h2>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{subtitle}</p>
+              <h2 className="mt-4 max-w-[14ch] text-3xl font-semibold leading-tight text-[var(--text-primary)] sm:text-[2rem]">
+                {title}
+              </h2>
+              <p className="mt-2 max-w-[36ch] text-sm leading-6 text-[var(--text-secondary)]">{subtitle}</p>
             </div>
             {children}
           </div>
 
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              className="flex h-11 items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
-            >
-              <Chrome className="h-4 w-4 text-[var(--info)]" />
-              Continue with Google
-            </button>
-            <button
-              type="button"
-              className="flex h-11 items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
-            >
-              <Github className="h-4 w-4" />
-              Continue with GitHub
-            </button>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[color-mix(in_srgb,var(--bg-card)_88%,transparent)] px-4 py-3 text-sm text-[var(--text-secondary)]">
+              <ShieldCheck className="h-4 w-4 text-[var(--accent)]" />
+              Protected by secure Clerk sign-in
+            </div>
+            <div className="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[color-mix(in_srgb,var(--bg-card)_88%,transparent)] px-4 py-3 text-sm text-[var(--text-secondary)]">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+              Redirects straight to your dashboard
+            </div>
           </div>
         </div>
       </section>
@@ -152,8 +148,8 @@ export default function SignInPage() {
 
   return (
     <AuthShell
-      title="Welcome back to the workspace your team actually enjoys using."
-      subtitle="Sign in to pick up tasks, check project momentum, and keep every stakeholder aligned."
+      title="Welcome back."
+      subtitle="Sign in to review priorities, unblock teammates, and get back to shipping."
     >
       <SignIn
         routing="path"
