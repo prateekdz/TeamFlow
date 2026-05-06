@@ -250,7 +250,7 @@ If you have any questions or need help:
 
 ---
 
-**Built with ❤️ by the Team Flow team**
+**Built with ❤️ by the Prateek**
 
 ```bash
 npm run dev
@@ -266,3 +266,5 @@ The API runs on `PORT` and Vite runs on `CLIENT_PORT`.
 - `npm run test` runs the Node test suite.
 - `npm run lint` runs ESLint.
 - `npm run db:push` pushes the Drizzle schema to PostgreSQL.
+
+Made by Prateek Dwivedi
