@@ -55,12 +55,16 @@ function isConfiguredSecret(value) {
  * @returns {string}
  */
 function resolveRuntimeEnv() {
-  if (process.env.NODE_ENV) {
-    return process.env.NODE_ENV;
+  if (process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PUBLIC_DOMAIN) {
+    if (process.env.NODE_ENV === "test") {
+      return "test";
+    }
+
+    return "production";
   }
 
-  if (process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PUBLIC_DOMAIN) {
-    return "production";
+  if (process.env.NODE_ENV) {
+    return process.env.NODE_ENV;
   }
 
   return "development";
