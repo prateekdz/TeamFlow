@@ -78,7 +78,7 @@ export function createConfig() {
     logLevel: process.env.LOG_LEVEL ?? "info",
     clerkPublishableKey: process.env.CLERK_PUBLISHABLE_KEY,
     clerkSecretKey: process.env.CLERK_SECRET_KEY,
-    clerkProxyUrl: process.env.VITE_CLERK_PROXY_URL,
+    clerkProxyUrl: process.env.CLERK_PROXY_URL,
     clerkEnabled:
       isConfiguredSecret(process.env.CLERK_PUBLISHABLE_KEY) &&
       isConfiguredSecret(process.env.CLERK_SECRET_KEY),

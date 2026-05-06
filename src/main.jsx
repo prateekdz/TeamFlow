@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { ClerkProvider } from "@clerk/react";
+import { setBaseUrl } from "@workspace/api-client-react";
 import App from "./App.jsx";
 import "./index.css";
 
@@ -14,6 +15,8 @@ const clerkProps = { publishableKey: PUBLISHABLE_KEY };
 if (import.meta.env.VITE_CLERK_PROXY_URL) {
   clerkProps.proxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
 }
+
+setBaseUrl(import.meta.env.VITE_API_BASE_URL);
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
