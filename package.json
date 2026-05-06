@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "description": "Full-stack Team Flow task manager migrated to modern JavaScript.",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "start": "node src/index.js",
     "server": "nodemon src/index.js",
